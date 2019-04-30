@@ -8,9 +8,9 @@ build = "build.rs"
 doctest = false
 
 [dependencies]
+arc-swap = "0.3.11"
 clap = "2.33"
 config = "0.9"
-crossbeam = "0.6"
 failure = "*"
 fallible-iterator = "0.2"
 fnv = "*"

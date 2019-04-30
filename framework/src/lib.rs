@@ -13,10 +13,10 @@
 
 // For cache aware allocation
 extern crate alloc;
+extern crate arc_swap;
 #[macro_use]
 extern crate clap;
 extern crate config as config_rs;
-extern crate crossbeam;
 #[cfg_attr(test, macro_use)]
 extern crate failure;
 extern crate fallible_iterator;

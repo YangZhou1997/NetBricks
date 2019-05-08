@@ -12,6 +12,7 @@ pub use self::map_batch::*;
 pub use self::queue_batch::*;
 pub use self::receive_batch::*;
 pub use self::send_batch::*;
+pub use self::complete_batch::*;
 
 mod filter_batch;
 mod filtermap_batch;
@@ -21,10 +22,13 @@ mod map_batch;
 mod queue_batch;
 mod receive_batch;
 mod send_batch;
+mod complete_batch;
 
 /// Error when processing packets
 #[derive(Debug)]
 pub enum PacketError {
+    /// Processing is complete; not really an error but we can short-circuit processing
+    Complete(*mut MBuf),
     /// The packet is intentionally dropped
     Drop(*mut MBuf),
     /// The packet is aborted due to an error
@@ -121,6 +125,18 @@ pub trait Batch {
         Self: Sized,
     {
         GroupByBatch::new(self, selector, composer)
+    }
+
+    /// Appends a complete operator to the end of the pipeline
+    ///
+    /// Use when processing is complete and no further modifications are necessary.
+    /// Any further operators will have no effect on packets that have been through
+    /// the complete operator.
+    fn complete(self) -> CompleteBatch<Self>
+    where
+        Self: Sized,
+    {
+        CompleteBatch::new(self)
     }
 
     /// Appends a send operator to the end of the pipeline

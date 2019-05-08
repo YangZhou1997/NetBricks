@@ -292,4 +292,34 @@ pub mod tests {
             assert!(batch.next().unwrap().is_err());
         }
     }
+
+    #[test]
+    fn complete_operator() {
+        use packets::tcp::tests::TCP_PACKET;
+        use packets::ethernet::MacAddr;
+
+        dpdk_test! {
+            let (producer, batch) = single_threaded_batch::<RawPacket>(1);
+            let mut batch = batch
+                .map(|p| p.parse::<Ethernet>())
+                .map(|mut e| {
+                    // ff:ff:ff:ff:ff:ff
+                    e.set_src(MacAddr::new(255, 255, 255, 255, 255, 255));
+                    Ok(e)
+                })
+                .complete()
+                .map(|mut e| {
+                    e.set_src(MacAddr::new(0x12, 0x34, 0x56, 0xAB, 0xCD, 0xEF));
+                    Ok(e)
+                });
+            producer.enqueue(RawPacket::from_bytes(&TCP_PACKET).unwrap());
+
+            if let Err(PacketError::Complete(mbuf)) = batch.next().unwrap() {
+                let eth = RawPacket::from_mbuf(mbuf).parse::<Ethernet>().unwrap();
+                assert_eq!("ff:ff:ff:ff:ff:ff", eth.src().to_string());
+            } else {
+                assert!(false, "Unexpected packet result :(");
+            }
+        }
+    }
 }

@@ -14,6 +14,17 @@ pub struct Ipv6Cidr {
     mask: u128,
 }
 
+impl Default for Ipv6Cidr {
+    fn default() -> Ipv6Cidr {
+        Ipv6Cidr {
+            address: Ipv6Addr::UNSPECIFIED,
+            length: Default::default(),
+            prefix: Default::default(),
+            mask: Default::default(),
+        }
+    }
+}
+
 impl Cidr for Ipv6Cidr {
     type Addr = Ipv6Addr;
 

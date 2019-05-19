@@ -14,6 +14,17 @@ pub struct Ipv4Cidr {
     mask: u32,
 }
 
+impl Default for Ipv4Cidr {
+    fn default() -> Ipv4Cidr {
+        Ipv4Cidr {
+            address: Ipv4Addr::UNSPECIFIED,
+            length: Default::default(),
+            prefix: Default::default(),
+            mask: Default::default(),
+        }
+    }
+}
+
 impl Cidr for Ipv4Cidr {
     type Addr = Ipv4Addr;
 

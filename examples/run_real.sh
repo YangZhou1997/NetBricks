@@ -9,11 +9,6 @@ fi
 
 echo $TASK
 
-if [ $# == 2 ]; then
-    $HOME/NetBricks/target/$MODE/$TASK --secondary
-else
-    $HOME/NetBricks/target/$MODE/$TASK\
-    -p $PORT -c $CORE --pool-size=$POOL_SIZE
-fi
+$HOME/NetBricks/target/$MODE/$TASK -f $TASK/config.toml
 
 unset RUST_BACKTRACE

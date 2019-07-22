@@ -15,10 +15,13 @@ pull-sandbox:
 
 run: pull-sandbox
 	@docker run -it --rm --privileged --network=host \
+		--user=root \
 		-w /opt \
         $(MOUNTS) \
 		-v $(BASE_DIR):/opt/netbricks \
 		-v $(BASE_DIR)/moongen:/opt/moongen \
+		-m 2g \
+		-v $(BASE_DIR)/../jemalloc:/opt/jemalloc \
 		$(SANDBOX) /bin/bash
 
 run-tests: pull-sandbox

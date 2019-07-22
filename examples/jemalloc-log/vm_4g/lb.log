@@ -1,0 +1,12 @@
+mmap: 4096
+munmap: 4096
+mmap: 2097152
+munmap: 2097152
+mmap: 4190208
+munmap: 487424
+munmap: 1605632
+mmap: 2097152
+mmap: 4194304
+mmap: 6291456
+mmap: 2097152
+mmap: 2097152

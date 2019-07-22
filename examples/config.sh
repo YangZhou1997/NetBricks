@@ -1,7 +1,7 @@
 # !/bin/bash
 
 # for both real and local run
-HOME=/home/yangz
+HOME=/home/vagrant
 # HOME=/users/yangzhou
 
 export LD_LIBRARY_PATH="$HOME/NetBricks/native:/opt/dpdk/dpdk-stable-17.08/build/lib:"

@@ -9,6 +9,7 @@ fi
 
 echo $TASK
 
-$HOME/NetBricks/target/$MODE/$TASK -f $TASK/config.toml
+# $HOME/NetBricks/target/$MODE/$TASK -f $TASK/config.toml
+$HOME/NetBricks/target/$MODE/$TASK -p $PORT -c $CORE --pool-size=$POOL_SIZE -d $TIME
 
 unset RUST_BACKTRACE

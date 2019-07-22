@@ -14,15 +14,27 @@ CFLAGS="-g3 -Wno-error=maybe-uninitialized -fPIC"
 sudo apt-get -y install build-essential ca-certificates curl \
     libnuma-dev libpcap-dev xz-utils
 
-cd ~/tools
-if [ ! -d "dpdk-stable-17.08.1" ]; then
-    curl -sSf https://fast.dpdk.org/rel/dpdk-17.08.1.tar.xz | tar -xJv
-elif [ ! -d "dpdk-stable-17.08.1/.git" ]; then
-    sudo rm -rf dpdk-stable-17.08.1/
-    git clone git@github.com:YangZhou1997/dpdk-stable-17.08.1.git
-else
+# This is used when you want to monitor dpdk hugepage usage during runtime. 
+build_dpdk_hugepage_mon () {
+    if [ ! -d "dpdk-stable-17.08.1" ]; then
+        curl -sSf https://fast.dpdk.org/rel/dpdk-17.08.1.tar.xz | tar -xJv
+    elif [ ! -d "dpdk-stable-17.08.1/.git" ]; then
+        sudo rm -rf dpdk-stable-17.08.1/
+        git clone git@github.com:YangZhou1997/dpdk-stable-17.08.1.git
+    else
+        echo "Rebuild dpdk!"
+    fi
+}
+
+# This is used when you normally want to rebuild dpdk in case that you made some modification. 
+build_dpdk_normal () {
     echo "Just build!"
-fi
+}
+
+cd ~/tools
+# build_dpdk_hugepage_mon
+build_dpdk_normal
+
 
 cp ~/utils/dpdk/common_linuxapp-17.08 $DPDK_HOME/config/common_linuxapp
 

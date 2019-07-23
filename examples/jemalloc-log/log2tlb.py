@@ -15,9 +15,9 @@ for line in f:
     else:
         alloc_type = line.split()[0]
         line = int(line.split()[1])
+    print alloc_type, line
     if alloc_type == "munmap:":
         continue
-    print alloc_type, line
     mem_count += line
     if line <= 4096: # 4K page
         tlb_count += 1

@@ -13,10 +13,8 @@ echo $TASK
 # -p $PORT -c $CORE --pool-size=$POOL_SIZE -d $TIME \
 # 2>&1 | grep Tracing --line-buffered | awk '{$3=$3/(1024.0)} {print}'
 
-HOME=/opt
-export LD_LIBRARY_PATH="$HOME/netbricks/native:/opt/dpdk/dpdk-stable-17.08/build/lib:"
-env LD_PRELOAD=$HOME/jemalloc/lib/libjemalloc.so $HOME/netbricks/target/$MODE/$TASK \
--p $PORT -c $CORE --pool-size=$POOL_SIZE -d $TIME 
+env LD_PRELOAD=$HOME/jemalloc/lib/libjemalloc.so $HOME/NetBricks/target/$MODE/$TASK \
+-p $PORT -c $CORE --pool-size=$POOL_SIZE -d $TIME
 # \
 # 2>&1 | grep Tracing --line-buffered | awk '{$3=$3/(1024.0)} {print}'
 

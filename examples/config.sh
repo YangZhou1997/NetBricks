@@ -4,6 +4,7 @@
 #HOME=/home/vagrant
 # HOME=/users/yangzhou
 HOME=/opt
+TRAFFIC=$HOME/traffic/ictf2010.pcap1
 
 export LD_LIBRARY_PATH="$HOME/NetBricks/native:/opt/dpdk/dpdk-stable-17.08/build/lib:"
 export RUST_BACKTRACE=1

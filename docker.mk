@@ -20,7 +20,7 @@ run: pull-sandbox
         $(MOUNTS) \
 		-v $(BASE_DIR):/opt/NetBricks \
 		-v $(BASE_DIR)/moongen:/opt/moongen \
-		-m 2g \
+		-m 256m \
 		-v $(BASE_DIR)/../jemalloc:/opt/jemalloc \
 		-v $(BASE_DIR)/../traffic:/opt/traffic \
 		$(SANDBOX) /bin/bash

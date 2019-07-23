@@ -14,5 +14,4 @@ PORT=0000:04:00.0
 CORE=0
 POOL_SIZE=512
 MODE=debug
-TIME=0
-# 0 means forever running.
+TIME=100

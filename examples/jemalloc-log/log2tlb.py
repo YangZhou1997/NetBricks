@@ -8,8 +8,16 @@ f = open(log_name, "r")
 tlb_count = 0
 mem_count = 0
 for line in f:
-    line = int(line.split()[1])
-    print line
+    temp = line.split()[0]
+    if temp == "[Tracing]":
+        alloc_type = line.split()[1]
+        line = int(line.split()[2])
+    else:
+        alloc_type = line.split()[0]
+        line = int(line.split()[1])
+    if alloc_type == "munmap:":
+        continue
+    print alloc_type, line
     mem_count += line
     if line <= 4096: # 4K page
         tlb_count += 1

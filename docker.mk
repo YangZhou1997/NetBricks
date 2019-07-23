@@ -18,17 +18,18 @@ run: pull-sandbox
 		--user=root \
 		-w /opt \
         $(MOUNTS) \
-		-v $(BASE_DIR):/opt/netbricks \
+		-v $(BASE_DIR):/opt/NetBricks \
 		-v $(BASE_DIR)/moongen:/opt/moongen \
 		-m 2g \
 		-v $(BASE_DIR)/../jemalloc:/opt/jemalloc \
+		-v $(BASE_DIR)/../traffic:/opt/traffic \
 		$(SANDBOX) /bin/bash
 
 run-tests: pull-sandbox
 	@docker run -it --rm --privileged --network=host \
 		-w /opt/netbricks \
 		$(MOUNTS) \
-		-v $(BASE_DIR):/opt/netbricks \
+		-v $(BASE_DIR):/opt/NetBricks \
 		-v $(BASE_DIR)/moongen:/opt/moongen \
 		$(SANDBOX) make test
 
@@ -36,6 +37,6 @@ run-lint: pull-sandbox
 	@docker run -it --rm --privileged --network=host \
 		-w /opt/netbricks \
 		$(MOUNTS) \
-		-v $(BASE_DIR):/opt/netbricks \
+		-v $(BASE_DIR):/opt/NetBricks \
 		-v $(BASE_DIR)/moongen:/opt/moongen \
 		$(SANDBOX) make lint

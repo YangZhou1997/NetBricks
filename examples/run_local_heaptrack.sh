@@ -9,5 +9,5 @@ fi
 
 echo $TASK
 
-heaptrack $HOME/NetBricks/target/debug/$TASK \
--p dpdk:eth_pcap0,rx_pcap=$TRAFFIC,tx_pcap=/tmp/out.pcap -c 1 -d 1
+heaptrack $HOME/NetBricks/target/$MODE/$TASK \
+-p dpdk:eth_pcap0,rx_pcap=$TRAFFIC,tx_pcap=/tmp/out.pcap -c $CORE --pool-size=$POOL_SIZE -d $TIME

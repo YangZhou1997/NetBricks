@@ -15,7 +15,7 @@ for line in f:
     else:
         alloc_type = line.split()[0]
         line = int(line.split()[1])
-    print alloc_type, line
+    # print alloc_type, line
     if alloc_type == "munmap:":
         continue
     mem_count += line

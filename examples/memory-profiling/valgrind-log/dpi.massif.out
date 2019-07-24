@@ -1,0 +1,744 @@
+desc: (none)
+cmd: /opt/NetBricks/target/debug/dpi -p dpdk:eth_pcap0,rx_pcap=/opt/traffic/ictf2010_trim/merged.pcap,tx_pcap=/tmp/out.pcap -c 0 --pool-size=512 -d 1800
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=4196497806
+mem_heap_B=54742136
+mem_heap_extra_B=5547296
+mem_stacks_B=0
+heap_tree=peak
+n4: 54742136 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 40480960 0x74E72B: alloc::alloc::realloc::h24482a8c8e00b5d3 (alloc.rs:111)
+  n4: 40480960 0x74E4F4: _$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Alloc$GT$::realloc::hb60ecba94eb9cfb1 (alloc.rs:166)
+   n1: 37748736 0x7323ED: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve_internal::h7628a503d9815027 (raw_vec.rs:666)
+    n1: 37748736 0x73AD30: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::h37d8d7126aae49f9 (raw_vec.rs:491)
+     n1: 37748736 0x6BE720: alloc::vec::Vec$LT$T$GT$::reserve::h22d4a4c566ccbeaf (vec.rs:457)
+      n2: 37748736 0x6BD432: alloc::vec::Vec$LT$T$GT$::push::h64b047069a42d525 (vec.rs:1033)
+       n1: 37748736 0x73E689: aho_corasick::nfa::NFA$LT$S$GT$::add_sparse_state::hc928847f9e09c3fe (nfa.rs:202)
+        n1: 37748736 0x745875: aho_corasick::nfa::Compiler$LT$S$GT$::add_state::h5552fb5701dd192c (nfa.rs:1091)
+         n1: 37748736 0x3E41F1: aho_corasick::nfa::Compiler$LT$S$GT$::build_trie::h0c32a4d9a11cbd28 (nfa.rs:663)
+          n1: 37748736 0x3E4953: aho_corasick::nfa::Compiler$LT$S$GT$::compile::h3a3fc0ec0f5bb221 (nfa.rs:594)
+           n1: 37748736 0x3E4DD9: aho_corasick::nfa::Builder::build::h731f6073fed6d0e3 (nfa.rs:532)
+            n1: 37748736 0x3EBBE9: aho_corasick::ahocorasick::AhoCorasickBuilder::build_with_size::hb46d8a2d65e6290f (ahocorasick.rs:1567)
+             n1: 37748736 0x3EC1D2: aho_corasick::ahocorasick::AhoCorasickBuilder::build::h6514a56ce83d5c7a (ahocorasick.rs:1507)
+              n1: 37748736 0x3EBA75: aho_corasick::ahocorasick::AhoCorasick::new::heaf50d23d7a5d6b6 (ahocorasick.rs:124)
+               n1: 37748736 0x3EDBC7: core::ops::function::FnOnce::call_once::hebc330fff02e7d96 (dpi.rs:37)
+                n1: 37748736 0x3F1639: lazy_static::lazy::Lazy$LT$T$GT$::get::_$u7b$$u7b$closure$u7d$$u7d$::h4cbc39a63135530e (inline_lazy.rs:28)
+                 n1: 37748736 0x3F1789: std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hcc18b4af0d717eb4 (once.rs:220)
+                  n1: 37748736 0xBB3E34: std::sync::once::Once::call_inner::hb8fe1c1776b20f38 (once.rs:387)
+                   n1: 37748736 0x3F171B: std::sync::once::Once::call_once::h2fc433c48ab57181 (once.rs:220)
+                    n1: 37748736 0x3F5660: _$LT$dpi..dpi..AC$u20$as$u20$core..ops..deref..Deref$GT$::deref::hce654dbc6c93548b (inline_lazy.rs:27)
+                     n1: 37748736 0x3F5222: dpi::dpi::dpi::hcd6e19f65d11d0c1 (dpi.rs:62)
+                      n1: 37748736 0x3ED76D: core::ops::function::FnMut::call_mut::he19e80567a7694a4 (function.rs:148)
+                       n1: 37748736 0x3F9450: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::_$u7b$$u7b$closure$u7d$$u7d$::hcdb1e43136bf2c5f (map_batch.rs:40)
+                        n1: 37748736 0x3F0AEF: core::option::Option$LT$T$GT$::map::h8afb7c2ffcb89171 (option.rs:416)
+                         n1: 37748736 0x3F9363: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::h682c04d227db4dea (map_batch.rs:35)
+                          n1: 37748736 0x3F57FB: _$LT$netbricks..operators..send_batch..SendBatch$LT$B$C$Tx$GT$$u20$as$u20$netbricks..scheduler..Executable$GT$::execute::hf83fab1817a29779 (send_batch.rs:37)
+                           n1: 37748736 0x42BBE4: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_internal::hb341ff6ef7843561 (standalone_scheduler.rs:133)
+                            n1: 37748736 0x42BE74: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_loop::h437470cd08a1b55f (standalone_scheduler.rs:158)
+                             n1: 37748736 0x42B544: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_request::h2c8897b4a846f953 (standalone_scheduler.rs:99)
+                              n0: 37748736 0x42B8D2: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_requests::h1be4825cfdff6ec8 (standalone_scheduler.rs:121)
+       n0: 0 in 1 place, below massif's threshold (1.00%)
+   n1: 1746784 0x73616D: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve_internal::he245c5eb54fb1514 (raw_vec.rs:666)
+    n1: 1746784 0x73A9F0: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::h23aa98ee602d17d9 (raw_vec.rs:491)
+     n1: 1746784 0x6BE9A0: alloc::vec::Vec$LT$T$GT$::reserve::h88499bf002616f64 (vec.rs:457)
+      n1: 1746784 0x6B696E: _$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$alloc..vec..SpecExtend$LT$$RF$T$C$core..slice..Iter$LT$T$GT$$GT$$GT$::spec_extend::h79ede309a6d70eda (vec.rs:1921)
+       n1: 1746784 0x6BC67D: alloc::vec::Vec$LT$T$GT$::extend_from_slice::h65c85fe3c70e9baa (vec.rs:1361)
+        n1: 1746784 0x73D992: aho_corasick::nfa::NFA$LT$S$GT$::copy_matches::h74bafcad7f858525 (nfa.rs:179)
+         n1: 1746784 0x7439CF: aho_corasick::nfa::Compiler$LT$S$GT$::fill_failure_transitions_standard::h0d0177d80534f451 (nfa.rs:808)
+          n1: 1746784 0x3E4AA7: aho_corasick::nfa::Compiler$LT$S$GT$::compile::h3a3fc0ec0f5bb221 (nfa.rs:600)
+           n1: 1746784 0x3E4DD9: aho_corasick::nfa::Builder::build::h731f6073fed6d0e3 (nfa.rs:532)
+            n1: 1746784 0x3EBBE9: aho_corasick::ahocorasick::AhoCorasickBuilder::build_with_size::hb46d8a2d65e6290f (ahocorasick.rs:1567)
+             n1: 1746784 0x3EC1D2: aho_corasick::ahocorasick::AhoCorasickBuilder::build::h6514a56ce83d5c7a (ahocorasick.rs:1507)
+              n1: 1746784 0x3EBA75: aho_corasick::ahocorasick::AhoCorasick::new::heaf50d23d7a5d6b6 (ahocorasick.rs:124)
+               n1: 1746784 0x3EDBC7: core::ops::function::FnOnce::call_once::hebc330fff02e7d96 (dpi.rs:37)
+                n1: 1746784 0x3F1639: lazy_static::lazy::Lazy$LT$T$GT$::get::_$u7b$$u7b$closure$u7d$$u7d$::h4cbc39a63135530e (inline_lazy.rs:28)
+                 n1: 1746784 0x3F1789: std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hcc18b4af0d717eb4 (once.rs:220)
+                  n1: 1746784 0xBB3E34: std::sync::once::Once::call_inner::hb8fe1c1776b20f38 (once.rs:387)
+                   n1: 1746784 0x3F171B: std::sync::once::Once::call_once::h2fc433c48ab57181 (once.rs:220)
+                    n1: 1746784 0x3F5660: _$LT$dpi..dpi..AC$u20$as$u20$core..ops..deref..Deref$GT$::deref::hce654dbc6c93548b (inline_lazy.rs:27)
+                     n1: 1746784 0x3F5222: dpi::dpi::dpi::hcd6e19f65d11d0c1 (dpi.rs:62)
+                      n1: 1746784 0x3ED76D: core::ops::function::FnMut::call_mut::he19e80567a7694a4 (function.rs:148)
+                       n1: 1746784 0x3F9450: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::_$u7b$$u7b$closure$u7d$$u7d$::hcdb1e43136bf2c5f (map_batch.rs:40)
+                        n1: 1746784 0x3F0AEF: core::option::Option$LT$T$GT$::map::h8afb7c2ffcb89171 (option.rs:416)
+                         n1: 1746784 0x3F9363: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::h682c04d227db4dea (map_batch.rs:35)
+                          n1: 1746784 0x3F57FB: _$LT$netbricks..operators..send_batch..SendBatch$LT$B$C$Tx$GT$$u20$as$u20$netbricks..scheduler..Executable$GT$::execute::hf83fab1817a29779 (send_batch.rs:37)
+                           n1: 1746784 0x42BBE4: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_internal::hb341ff6ef7843561 (standalone_scheduler.rs:133)
+                            n1: 1746784 0x42BE74: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_loop::h437470cd08a1b55f (standalone_scheduler.rs:158)
+                             n1: 1746784 0x42B544: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_request::h2c8897b4a846f953 (standalone_scheduler.rs:99)
+                              n0: 1746784 0x42B8D2: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_requests::h1be4825cfdff6ec8 (standalone_scheduler.rs:121)
+   n1: 723296 0x73334D: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve_internal::h9b6855f8cf472941 (raw_vec.rs:666)
+    n1: 723296 0x73B620: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::hf75c626a0968a514 (raw_vec.rs:491)
+     n1: 723296 0x6BE760: alloc::vec::Vec$LT$T$GT$::reserve::h2872d49a3b6d16e2 (vec.rs:457)
+      n1: 723296 0x6BE557: alloc::vec::Vec$LT$T$GT$::insert::hdece65170dbaf59d (vec.rs:882)
+       n1: 723296 0x7460ED: aho_corasick::nfa::Transitions$LT$S$GT$::set_next_state::h3aa54061ddcb69e4 (nfa.rs:377)
+        n1: 723296 0x73EF77: aho_corasick::nfa::State$LT$S$GT$::set_next_state::hc235c62cb4303c38 (nfa.rs:321)
+         n1: 723296 0x3E4343: aho_corasick::nfa::Compiler$LT$S$GT$::build_trie::h0c32a4d9a11cbd28 (nfa.rs:664)
+          n1: 723296 0x3E4953: aho_corasick::nfa::Compiler$LT$S$GT$::compile::h3a3fc0ec0f5bb221 (nfa.rs:594)
+           n1: 723296 0x3E4DD9: aho_corasick::nfa::Builder::build::h731f6073fed6d0e3 (nfa.rs:532)
+            n1: 723296 0x3EBBE9: aho_corasick::ahocorasick::AhoCorasickBuilder::build_with_size::hb46d8a2d65e6290f (ahocorasick.rs:1567)
+             n1: 723296 0x3EC1D2: aho_corasick::ahocorasick::AhoCorasickBuilder::build::h6514a56ce83d5c7a (ahocorasick.rs:1507)
+              n1: 723296 0x3EBA75: aho_corasick::ahocorasick::AhoCorasick::new::heaf50d23d7a5d6b6 (ahocorasick.rs:124)
+               n1: 723296 0x3EDBC7: core::ops::function::FnOnce::call_once::hebc330fff02e7d96 (dpi.rs:37)
+                n1: 723296 0x3F1639: lazy_static::lazy::Lazy$LT$T$GT$::get::_$u7b$$u7b$closure$u7d$$u7d$::h4cbc39a63135530e (inline_lazy.rs:28)
+                 n1: 723296 0x3F1789: std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hcc18b4af0d717eb4 (once.rs:220)
+                  n1: 723296 0xBB3E34: std::sync::once::Once::call_inner::hb8fe1c1776b20f38 (once.rs:387)
+                   n1: 723296 0x3F171B: std::sync::once::Once::call_once::h2fc433c48ab57181 (once.rs:220)
+                    n1: 723296 0x3F5660: _$LT$dpi..dpi..AC$u20$as$u20$core..ops..deref..Deref$GT$::deref::hce654dbc6c93548b (inline_lazy.rs:27)
+                     n1: 723296 0x3F5222: dpi::dpi::dpi::hcd6e19f65d11d0c1 (dpi.rs:62)
+                      n1: 723296 0x3ED76D: core::ops::function::FnMut::call_mut::he19e80567a7694a4 (function.rs:148)
+                       n1: 723296 0x3F9450: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::_$u7b$$u7b$closure$u7d$$u7d$::hcdb1e43136bf2c5f (map_batch.rs:40)
+                        n1: 723296 0x3F0AEF: core::option::Option$LT$T$GT$::map::h8afb7c2ffcb89171 (option.rs:416)
+                         n1: 723296 0x3F9363: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::h682c04d227db4dea (map_batch.rs:35)
+                          n1: 723296 0x3F57FB: _$LT$netbricks..operators..send_batch..SendBatch$LT$B$C$Tx$GT$$u20$as$u20$netbricks..scheduler..Executable$GT$::execute::hf83fab1817a29779 (send_batch.rs:37)
+                           n1: 723296 0x42BBE4: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_internal::hb341ff6ef7843561 (standalone_scheduler.rs:133)
+                            n1: 723296 0x42BE74: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_loop::h437470cd08a1b55f (standalone_scheduler.rs:158)
+                             n1: 723296 0x42B544: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_request::h2c8897b4a846f953 (standalone_scheduler.rs:99)
+                              n0: 723296 0x42B8D2: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_requests::h1be4825cfdff6ec8 (standalone_scheduler.rs:121)
+   n0: 262144 in 3 places, all below massif's threshold (1.00%)
+ n2: 11492884 0x74E65A: alloc::alloc::alloc::hd01e47a504382ef7 (alloc.rs:75)
+  n3: 11491628 0x74E440: _$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Alloc$GT$::alloc::h338c7c8c69872727 (alloc.rs:151)
+   n1: 6791184 0x736197: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve_internal::he245c5eb54fb1514 (raw_vec.rs:668)
+    n1: 6791184 0x73A9F0: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::h23aa98ee602d17d9 (raw_vec.rs:491)
+     n2: 6791184 0x6BE9A0: alloc::vec::Vec$LT$T$GT$::reserve::h88499bf002616f64 (vec.rs:457)
+      n1: 6785648 0x6B696E: _$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$alloc..vec..SpecExtend$LT$$RF$T$C$core..slice..Iter$LT$T$GT$$GT$$GT$::spec_extend::h79ede309a6d70eda (vec.rs:1921)
+       n1: 6785648 0x6BC67D: alloc::vec::Vec$LT$T$GT$::extend_from_slice::h65c85fe3c70e9baa (vec.rs:1361)
+        n1: 6785648 0x73D992: aho_corasick::nfa::NFA$LT$S$GT$::copy_matches::h74bafcad7f858525 (nfa.rs:179)
+         n1: 6785648 0x7439CF: aho_corasick::nfa::Compiler$LT$S$GT$::fill_failure_transitions_standard::h0d0177d80534f451 (nfa.rs:808)
+          n1: 6785648 0x3E4AA7: aho_corasick::nfa::Compiler$LT$S$GT$::compile::h3a3fc0ec0f5bb221 (nfa.rs:600)
+           n1: 6785648 0x3E4DD9: aho_corasick::nfa::Builder::build::h731f6073fed6d0e3 (nfa.rs:532)
+            n1: 6785648 0x3EBBE9: aho_corasick::ahocorasick::AhoCorasickBuilder::build_with_size::hb46d8a2d65e6290f (ahocorasick.rs:1567)
+             n1: 6785648 0x3EC1D2: aho_corasick::ahocorasick::AhoCorasickBuilder::build::h6514a56ce83d5c7a (ahocorasick.rs:1507)
+              n1: 6785648 0x3EBA75: aho_corasick::ahocorasick::AhoCorasick::new::heaf50d23d7a5d6b6 (ahocorasick.rs:124)
+               n1: 6785648 0x3EDBC7: core::ops::function::FnOnce::call_once::hebc330fff02e7d96 (dpi.rs:37)
+                n1: 6785648 0x3F1639: lazy_static::lazy::Lazy$LT$T$GT$::get::_$u7b$$u7b$closure$u7d$$u7d$::h4cbc39a63135530e (inline_lazy.rs:28)
+                 n1: 6785648 0x3F1789: std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hcc18b4af0d717eb4 (once.rs:220)
+                  n1: 6785648 0xBB3E34: std::sync::once::Once::call_inner::hb8fe1c1776b20f38 (once.rs:387)
+                   n1: 6785648 0x3F171B: std::sync::once::Once::call_once::h2fc433c48ab57181 (once.rs:220)
+                    n1: 6785648 0x3F5660: _$LT$dpi..dpi..AC$u20$as$u20$core..ops..deref..Deref$GT$::deref::hce654dbc6c93548b (inline_lazy.rs:27)
+                     n1: 6785648 0x3F5222: dpi::dpi::dpi::hcd6e19f65d11d0c1 (dpi.rs:62)
+                      n1: 6785648 0x3ED76D: core::ops::function::FnMut::call_mut::he19e80567a7694a4 (function.rs:148)
+                       n1: 6785648 0x3F9450: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::_$u7b$$u7b$closure$u7d$$u7d$::hcdb1e43136bf2c5f (map_batch.rs:40)
+                        n1: 6785648 0x3F0AEF: core::option::Option$LT$T$GT$::map::h8afb7c2ffcb89171 (option.rs:416)
+                         n1: 6785648 0x3F9363: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::h682c04d227db4dea (map_batch.rs:35)
+                          n1: 6785648 0x3F57FB: _$LT$netbricks..operators..send_batch..SendBatch$LT$B$C$Tx$GT$$u20$as$u20$netbricks..scheduler..Executable$GT$::execute::hf83fab1817a29779 (send_batch.rs:37)
+                           n1: 6785648 0x42BBE4: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_internal::hb341ff6ef7843561 (standalone_scheduler.rs:133)
+                            n1: 6785648 0x42BE74: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_loop::h437470cd08a1b55f (standalone_scheduler.rs:158)
+                             n1: 6785648 0x42B544: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_request::h2c8897b4a846f953 (standalone_scheduler.rs:99)
+                              n0: 6785648 0x42B8D2: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_requests::h1be4825cfdff6ec8 (standalone_scheduler.rs:121)
+      n0: 5536 in 1 place, below massif's threshold (1.00%)
+   n1: 4591120 0x733377: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve_internal::h9b6855f8cf472941 (raw_vec.rs:668)
+    n1: 4591120 0x73B620: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::hf75c626a0968a514 (raw_vec.rs:491)
+     n1: 4591120 0x6BE760: alloc::vec::Vec$LT$T$GT$::reserve::h2872d49a3b6d16e2 (vec.rs:457)
+      n1: 4591120 0x6BE557: alloc::vec::Vec$LT$T$GT$::insert::hdece65170dbaf59d (vec.rs:882)
+       n1: 4591120 0x7460ED: aho_corasick::nfa::Transitions$LT$S$GT$::set_next_state::h3aa54061ddcb69e4 (nfa.rs:377)
+        n1: 4591120 0x73EF77: aho_corasick::nfa::State$LT$S$GT$::set_next_state::hc235c62cb4303c38 (nfa.rs:321)
+         n1: 4591120 0x3E4343: aho_corasick::nfa::Compiler$LT$S$GT$::build_trie::h0c32a4d9a11cbd28 (nfa.rs:664)
+          n1: 4591120 0x3E4953: aho_corasick::nfa::Compiler$LT$S$GT$::compile::h3a3fc0ec0f5bb221 (nfa.rs:594)
+           n1: 4591120 0x3E4DD9: aho_corasick::nfa::Builder::build::h731f6073fed6d0e3 (nfa.rs:532)
+            n1: 4591120 0x3EBBE9: aho_corasick::ahocorasick::AhoCorasickBuilder::build_with_size::hb46d8a2d65e6290f (ahocorasick.rs:1567)
+             n1: 4591120 0x3EC1D2: aho_corasick::ahocorasick::AhoCorasickBuilder::build::h6514a56ce83d5c7a (ahocorasick.rs:1507)
+              n1: 4591120 0x3EBA75: aho_corasick::ahocorasick::AhoCorasick::new::heaf50d23d7a5d6b6 (ahocorasick.rs:124)
+               n1: 4591120 0x3EDBC7: core::ops::function::FnOnce::call_once::hebc330fff02e7d96 (dpi.rs:37)
+                n1: 4591120 0x3F1639: lazy_static::lazy::Lazy$LT$T$GT$::get::_$u7b$$u7b$closure$u7d$$u7d$::h4cbc39a63135530e (inline_lazy.rs:28)
+                 n1: 4591120 0x3F1789: std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hcc18b4af0d717eb4 (once.rs:220)
+                  n1: 4591120 0xBB3E34: std::sync::once::Once::call_inner::hb8fe1c1776b20f38 (once.rs:387)
+                   n1: 4591120 0x3F171B: std::sync::once::Once::call_once::h2fc433c48ab57181 (once.rs:220)
+                    n1: 4591120 0x3F5660: _$LT$dpi..dpi..AC$u20$as$u20$core..ops..deref..Deref$GT$::deref::hce654dbc6c93548b (inline_lazy.rs:27)
+                     n1: 4591120 0x3F5222: dpi::dpi::dpi::hcd6e19f65d11d0c1 (dpi.rs:62)
+                      n1: 4591120 0x3ED76D: core::ops::function::FnMut::call_mut::he19e80567a7694a4 (function.rs:148)
+                       n1: 4591120 0x3F9450: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::_$u7b$$u7b$closure$u7d$$u7d$::hcdb1e43136bf2c5f (map_batch.rs:40)
+                        n1: 4591120 0x3F0AEF: core::option::Option$LT$T$GT$::map::h8afb7c2ffcb89171 (option.rs:416)
+                         n1: 4591120 0x3F9363: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::h682c04d227db4dea (map_batch.rs:35)
+                          n1: 4591120 0x3F57FB: _$LT$netbricks..operators..send_batch..SendBatch$LT$B$C$Tx$GT$$u20$as$u20$netbricks..scheduler..Executable$GT$::execute::hf83fab1817a29779 (send_batch.rs:37)
+                           n1: 4591120 0x42BBE4: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_internal::hb341ff6ef7843561 (standalone_scheduler.rs:133)
+                            n1: 4591120 0x42BE74: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_loop::h437470cd08a1b55f (standalone_scheduler.rs:158)
+                             n1: 4591120 0x42B544: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_request::h2c8897b4a846f953 (standalone_scheduler.rs:99)
+                              n0: 4591120 0x42B8D2: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_requests::h1be4825cfdff6ec8 (standalone_scheduler.rs:121)
+   n0: 109324 in 14 places, all below massif's threshold (1.00%)
+  n0: 1256 in 2 places, all below massif's threshold (1.00%)
+ n1: 1572864 0xAD086B: alloc::alloc::realloc::h0e6c44c288ee6375 (alloc.rs:111)
+  n2: 1572864 0xACEBF4: _$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Alloc$GT$::realloc::h58532afcb7ec2655 (alloc.rs:166)
+   n1: 1572864 0xABCF1D: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve_internal::h8d87606dbd5c9c9c (raw_vec.rs:666)
+    n1: 1572864 0xAC4370: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::had04cc49007c8f92 (raw_vec.rs:491)
+     n1: 1572864 0xA513B0: alloc::vec::Vec$LT$T$GT$::reserve::h4a150e3559b39f25 (vec.rs:457)
+      n1: 1572864 0xA4F689: alloc::vec::Vec$LT$T$GT$::push::h1c1fa733e776fc1f (vec.rs:1033)
+       n1: 1572864 0x3EDC97: core::ops::function::FnOnce::call_once::hebc330fff02e7d96 (dpi.rs:29)
+        n1: 1572864 0x3F1639: lazy_static::lazy::Lazy$LT$T$GT$::get::_$u7b$$u7b$closure$u7d$$u7d$::h4cbc39a63135530e (inline_lazy.rs:28)
+         n1: 1572864 0x3F1789: std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hcc18b4af0d717eb4 (once.rs:220)
+          n1: 1572864 0xBB3E34: std::sync::once::Once::call_inner::hb8fe1c1776b20f38 (once.rs:387)
+           n1: 1572864 0x3F171B: std::sync::once::Once::call_once::h2fc433c48ab57181 (once.rs:220)
+            n1: 1572864 0x3F5660: _$LT$dpi..dpi..AC$u20$as$u20$core..ops..deref..Deref$GT$::deref::hce654dbc6c93548b (inline_lazy.rs:27)
+             n1: 1572864 0x3F5222: dpi::dpi::dpi::hcd6e19f65d11d0c1 (dpi.rs:62)
+              n1: 1572864 0x3ED76D: core::ops::function::FnMut::call_mut::he19e80567a7694a4 (function.rs:148)
+               n1: 1572864 0x3F9450: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::_$u7b$$u7b$closure$u7d$$u7d$::hcdb1e43136bf2c5f (map_batch.rs:40)
+                n1: 1572864 0x3F0AEF: core::option::Option$LT$T$GT$::map::h8afb7c2ffcb89171 (option.rs:416)
+                 n1: 1572864 0x3F9363: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::h682c04d227db4dea (map_batch.rs:35)
+                  n1: 1572864 0x3F57FB: _$LT$netbricks..operators..send_batch..SendBatch$LT$B$C$Tx$GT$$u20$as$u20$netbricks..scheduler..Executable$GT$::execute::hf83fab1817a29779 (send_batch.rs:37)
+                   n1: 1572864 0x42BBE4: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_internal::hb341ff6ef7843561 (standalone_scheduler.rs:133)
+                    n1: 1572864 0x42BE74: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_loop::h437470cd08a1b55f (standalone_scheduler.rs:158)
+                     n1: 1572864 0x42B544: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_request::h2c8897b4a846f953 (standalone_scheduler.rs:99)
+                      n1: 1572864 0x42B8D2: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_requests::h1be4825cfdff6ec8 (standalone_scheduler.rs:121)
+                       n1: 1572864 0x429270: netbricks::scheduler::context::NetBricksContext::start_scheduler::_$u7b$$u7b$closure$u7d$$u7d$::hc6f9da786637809c (context.rs:71)
+                        n1: 1572864 0x469B66: std::sys_common::backtrace::__rust_begin_short_backtrace::h1eac5c71a6e5b15b (backtrace.rs:136)
+                         n1: 1572864 0x422A54: std::thread::Builder::spawn_unchecked::_$u7b$$u7b$closure$u7d$$u7d$::_$u7b$$u7b$closure$u7d$$u7d$::h198ac36156fc2364 (mod.rs:469)
+                          n1: 1572864 0x492617: _$LT$std..panic..AssertUnwindSafe$LT$F$GT$$u20$as$u20$core..ops..function..FnOnce$LT$$LP$$RP$$GT$$GT$::call_once::h25eb82d2942107a2 (panic.rs:309)
+                           n1: 1572864 0x46A940: std::panicking::try::do_call::h34e19f79c7dbf35e (panicking.rs:293)
+                            n1: 1572864 0xBBBB78: __rust_maybe_catch_panic (lib.rs:85)
+                             n1: 1572864 0x46A791: std::panicking::try::h7f12cae76634748c (panicking.rs:272)
+                              n0: 1572864 0x492697: std::panic::catch_unwind::hf473e45382c02ec6 (panic.rs:388)
+   n0: 0 in 4 places, all below massif's threshold (1.00%)
+ n0: 1195428 in 91 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=2
+#-----------
+time=46498272430
+mem_heap_B=52428423
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=94144238370
+mem_heap_B=52380807
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=126521155936
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=184676238778
+mem_heap_B=52382343
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=225663332233
+mem_heap_B=52379655
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=253425808660
+mem_heap_B=52391559
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=detailed
+n3: 52391559 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 40218816 0x74E72B: alloc::alloc::realloc::h24482a8c8e00b5d3 (alloc.rs:111)
+  n4: 40218816 0x74E4F4: _$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Alloc$GT$::realloc::hb60ecba94eb9cfb1 (alloc.rs:166)
+   n1: 37748736 0x7323ED: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve_internal::h7628a503d9815027 (raw_vec.rs:666)
+    n1: 37748736 0x73AD30: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::h37d8d7126aae49f9 (raw_vec.rs:491)
+     n1: 37748736 0x6BE720: alloc::vec::Vec$LT$T$GT$::reserve::h22d4a4c566ccbeaf (vec.rs:457)
+      n2: 37748736 0x6BD432: alloc::vec::Vec$LT$T$GT$::push::h64b047069a42d525 (vec.rs:1033)
+       n1: 37748736 0x73E689: aho_corasick::nfa::NFA$LT$S$GT$::add_sparse_state::hc928847f9e09c3fe (nfa.rs:202)
+        n1: 37748736 0x745875: aho_corasick::nfa::Compiler$LT$S$GT$::add_state::h5552fb5701dd192c (nfa.rs:1091)
+         n1: 37748736 0x3E41F1: aho_corasick::nfa::Compiler$LT$S$GT$::build_trie::h0c32a4d9a11cbd28 (nfa.rs:663)
+          n1: 37748736 0x3E4953: aho_corasick::nfa::Compiler$LT$S$GT$::compile::h3a3fc0ec0f5bb221 (nfa.rs:594)
+           n1: 37748736 0x3E4DD9: aho_corasick::nfa::Builder::build::h731f6073fed6d0e3 (nfa.rs:532)
+            n1: 37748736 0x3EBBE9: aho_corasick::ahocorasick::AhoCorasickBuilder::build_with_size::hb46d8a2d65e6290f (ahocorasick.rs:1567)
+             n1: 37748736 0x3EC1D2: aho_corasick::ahocorasick::AhoCorasickBuilder::build::h6514a56ce83d5c7a (ahocorasick.rs:1507)
+              n1: 37748736 0x3EBA75: aho_corasick::ahocorasick::AhoCorasick::new::heaf50d23d7a5d6b6 (ahocorasick.rs:124)
+               n1: 37748736 0x3EDBC7: core::ops::function::FnOnce::call_once::hebc330fff02e7d96 (dpi.rs:37)
+                n1: 37748736 0x3F1639: lazy_static::lazy::Lazy$LT$T$GT$::get::_$u7b$$u7b$closure$u7d$$u7d$::h4cbc39a63135530e (inline_lazy.rs:28)
+                 n1: 37748736 0x3F1789: std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hcc18b4af0d717eb4 (once.rs:220)
+                  n1: 37748736 0xBB3E34: std::sync::once::Once::call_inner::hb8fe1c1776b20f38 (once.rs:387)
+                   n1: 37748736 0x3F171B: std::sync::once::Once::call_once::h2fc433c48ab57181 (once.rs:220)
+                    n1: 37748736 0x3F5660: _$LT$dpi..dpi..AC$u20$as$u20$core..ops..deref..Deref$GT$::deref::hce654dbc6c93548b (inline_lazy.rs:27)
+                     n1: 37748736 0x3F5222: dpi::dpi::dpi::hcd6e19f65d11d0c1 (dpi.rs:62)
+                      n1: 37748736 0x3ED76D: core::ops::function::FnMut::call_mut::he19e80567a7694a4 (function.rs:148)
+                       n1: 37748736 0x3F9450: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::_$u7b$$u7b$closure$u7d$$u7d$::hcdb1e43136bf2c5f (map_batch.rs:40)
+                        n1: 37748736 0x3F0AEF: core::option::Option$LT$T$GT$::map::h8afb7c2ffcb89171 (option.rs:416)
+                         n1: 37748736 0x3F9363: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::h682c04d227db4dea (map_batch.rs:35)
+                          n1: 37748736 0x3F57FB: _$LT$netbricks..operators..send_batch..SendBatch$LT$B$C$Tx$GT$$u20$as$u20$netbricks..scheduler..Executable$GT$::execute::hf83fab1817a29779 (send_batch.rs:37)
+                           n1: 37748736 0x42BBE4: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_internal::hb341ff6ef7843561 (standalone_scheduler.rs:133)
+                            n1: 37748736 0x42BE74: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_loop::h437470cd08a1b55f (standalone_scheduler.rs:158)
+                             n1: 37748736 0x42B544: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_request::h2c8897b4a846f953 (standalone_scheduler.rs:99)
+                              n0: 37748736 0x42B8D2: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_requests::h1be4825cfdff6ec8 (standalone_scheduler.rs:121)
+       n0: 0 in 1 place, below massif's threshold (1.00%)
+   n1: 1746784 0x73616D: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve_internal::he245c5eb54fb1514 (raw_vec.rs:666)
+    n1: 1746784 0x73A9F0: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::h23aa98ee602d17d9 (raw_vec.rs:491)
+     n1: 1746784 0x6BE9A0: alloc::vec::Vec$LT$T$GT$::reserve::h88499bf002616f64 (vec.rs:457)
+      n1: 1746784 0x6B696E: _$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$alloc..vec..SpecExtend$LT$$RF$T$C$core..slice..Iter$LT$T$GT$$GT$$GT$::spec_extend::h79ede309a6d70eda (vec.rs:1921)
+       n1: 1746784 0x6BC67D: alloc::vec::Vec$LT$T$GT$::extend_from_slice::h65c85fe3c70e9baa (vec.rs:1361)
+        n1: 1746784 0x73D992: aho_corasick::nfa::NFA$LT$S$GT$::copy_matches::h74bafcad7f858525 (nfa.rs:179)
+         n1: 1746784 0x7439CF: aho_corasick::nfa::Compiler$LT$S$GT$::fill_failure_transitions_standard::h0d0177d80534f451 (nfa.rs:808)
+          n1: 1746784 0x3E4AA7: aho_corasick::nfa::Compiler$LT$S$GT$::compile::h3a3fc0ec0f5bb221 (nfa.rs:600)
+           n1: 1746784 0x3E4DD9: aho_corasick::nfa::Builder::build::h731f6073fed6d0e3 (nfa.rs:532)
+            n1: 1746784 0x3EBBE9: aho_corasick::ahocorasick::AhoCorasickBuilder::build_with_size::hb46d8a2d65e6290f (ahocorasick.rs:1567)
+             n1: 1746784 0x3EC1D2: aho_corasick::ahocorasick::AhoCorasickBuilder::build::h6514a56ce83d5c7a (ahocorasick.rs:1507)
+              n1: 1746784 0x3EBA75: aho_corasick::ahocorasick::AhoCorasick::new::heaf50d23d7a5d6b6 (ahocorasick.rs:124)
+               n1: 1746784 0x3EDBC7: core::ops::function::FnOnce::call_once::hebc330fff02e7d96 (dpi.rs:37)
+                n1: 1746784 0x3F1639: lazy_static::lazy::Lazy$LT$T$GT$::get::_$u7b$$u7b$closure$u7d$$u7d$::h4cbc39a63135530e (inline_lazy.rs:28)
+                 n1: 1746784 0x3F1789: std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hcc18b4af0d717eb4 (once.rs:220)
+                  n1: 1746784 0xBB3E34: std::sync::once::Once::call_inner::hb8fe1c1776b20f38 (once.rs:387)
+                   n1: 1746784 0x3F171B: std::sync::once::Once::call_once::h2fc433c48ab57181 (once.rs:220)
+                    n1: 1746784 0x3F5660: _$LT$dpi..dpi..AC$u20$as$u20$core..ops..deref..Deref$GT$::deref::hce654dbc6c93548b (inline_lazy.rs:27)
+                     n1: 1746784 0x3F5222: dpi::dpi::dpi::hcd6e19f65d11d0c1 (dpi.rs:62)
+                      n1: 1746784 0x3ED76D: core::ops::function::FnMut::call_mut::he19e80567a7694a4 (function.rs:148)
+                       n1: 1746784 0x3F9450: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::_$u7b$$u7b$closure$u7d$$u7d$::hcdb1e43136bf2c5f (map_batch.rs:40)
+                        n1: 1746784 0x3F0AEF: core::option::Option$LT$T$GT$::map::h8afb7c2ffcb89171 (option.rs:416)
+                         n1: 1746784 0x3F9363: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::h682c04d227db4dea (map_batch.rs:35)
+                          n1: 1746784 0x3F57FB: _$LT$netbricks..operators..send_batch..SendBatch$LT$B$C$Tx$GT$$u20$as$u20$netbricks..scheduler..Executable$GT$::execute::hf83fab1817a29779 (send_batch.rs:37)
+                           n1: 1746784 0x42BBE4: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_internal::hb341ff6ef7843561 (standalone_scheduler.rs:133)
+                            n1: 1746784 0x42BE74: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_loop::h437470cd08a1b55f (standalone_scheduler.rs:158)
+                             n1: 1746784 0x42B544: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_request::h2c8897b4a846f953 (standalone_scheduler.rs:99)
+                              n0: 1746784 0x42B8D2: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_requests::h1be4825cfdff6ec8 (standalone_scheduler.rs:121)
+   n1: 723296 0x73334D: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve_internal::h9b6855f8cf472941 (raw_vec.rs:666)
+    n1: 723296 0x73B620: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::hf75c626a0968a514 (raw_vec.rs:491)
+     n1: 723296 0x6BE760: alloc::vec::Vec$LT$T$GT$::reserve::h2872d49a3b6d16e2 (vec.rs:457)
+      n1: 723296 0x6BE557: alloc::vec::Vec$LT$T$GT$::insert::hdece65170dbaf59d (vec.rs:882)
+       n1: 723296 0x7460ED: aho_corasick::nfa::Transitions$LT$S$GT$::set_next_state::h3aa54061ddcb69e4 (nfa.rs:377)
+        n1: 723296 0x73EF77: aho_corasick::nfa::State$LT$S$GT$::set_next_state::hc235c62cb4303c38 (nfa.rs:321)
+         n1: 723296 0x3E4343: aho_corasick::nfa::Compiler$LT$S$GT$::build_trie::h0c32a4d9a11cbd28 (nfa.rs:664)
+          n1: 723296 0x3E4953: aho_corasick::nfa::Compiler$LT$S$GT$::compile::h3a3fc0ec0f5bb221 (nfa.rs:594)
+           n1: 723296 0x3E4DD9: aho_corasick::nfa::Builder::build::h731f6073fed6d0e3 (nfa.rs:532)
+            n1: 723296 0x3EBBE9: aho_corasick::ahocorasick::AhoCorasickBuilder::build_with_size::hb46d8a2d65e6290f (ahocorasick.rs:1567)
+             n1: 723296 0x3EC1D2: aho_corasick::ahocorasick::AhoCorasickBuilder::build::h6514a56ce83d5c7a (ahocorasick.rs:1507)
+              n1: 723296 0x3EBA75: aho_corasick::ahocorasick::AhoCorasick::new::heaf50d23d7a5d6b6 (ahocorasick.rs:124)
+               n1: 723296 0x3EDBC7: core::ops::function::FnOnce::call_once::hebc330fff02e7d96 (dpi.rs:37)
+                n1: 723296 0x3F1639: lazy_static::lazy::Lazy$LT$T$GT$::get::_$u7b$$u7b$closure$u7d$$u7d$::h4cbc39a63135530e (inline_lazy.rs:28)
+                 n1: 723296 0x3F1789: std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hcc18b4af0d717eb4 (once.rs:220)
+                  n1: 723296 0xBB3E34: std::sync::once::Once::call_inner::hb8fe1c1776b20f38 (once.rs:387)
+                   n1: 723296 0x3F171B: std::sync::once::Once::call_once::h2fc433c48ab57181 (once.rs:220)
+                    n1: 723296 0x3F5660: _$LT$dpi..dpi..AC$u20$as$u20$core..ops..deref..Deref$GT$::deref::hce654dbc6c93548b (inline_lazy.rs:27)
+                     n1: 723296 0x3F5222: dpi::dpi::dpi::hcd6e19f65d11d0c1 (dpi.rs:62)
+                      n1: 723296 0x3ED76D: core::ops::function::FnMut::call_mut::he19e80567a7694a4 (function.rs:148)
+                       n1: 723296 0x3F9450: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::_$u7b$$u7b$closure$u7d$$u7d$::hcdb1e43136bf2c5f (map_batch.rs:40)
+                        n1: 723296 0x3F0AEF: core::option::Option$LT$T$GT$::map::h8afb7c2ffcb89171 (option.rs:416)
+                         n1: 723296 0x3F9363: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::h682c04d227db4dea (map_batch.rs:35)
+                          n1: 723296 0x3F57FB: _$LT$netbricks..operators..send_batch..SendBatch$LT$B$C$Tx$GT$$u20$as$u20$netbricks..scheduler..Executable$GT$::execute::hf83fab1817a29779 (send_batch.rs:37)
+                           n1: 723296 0x42BBE4: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_internal::hb341ff6ef7843561 (standalone_scheduler.rs:133)
+                            n1: 723296 0x42BE74: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_loop::h437470cd08a1b55f (standalone_scheduler.rs:158)
+                             n1: 723296 0x42B544: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_request::h2c8897b4a846f953 (standalone_scheduler.rs:99)
+                              n0: 723296 0x42B8D2: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_requests::h1be4825cfdff6ec8 (standalone_scheduler.rs:121)
+   n0: 0 in 3 places, all below massif's threshold (1.00%)
+ n2: 11492884 0x74E65A: alloc::alloc::alloc::hd01e47a504382ef7 (alloc.rs:75)
+  n3: 11491628 0x74E440: _$LT$alloc..alloc..Global$u20$as$u20$core..alloc..Alloc$GT$::alloc::h338c7c8c69872727 (alloc.rs:151)
+   n1: 6791184 0x736197: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve_internal::he245c5eb54fb1514 (raw_vec.rs:668)
+    n1: 6791184 0x73A9F0: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::h23aa98ee602d17d9 (raw_vec.rs:491)
+     n2: 6791184 0x6BE9A0: alloc::vec::Vec$LT$T$GT$::reserve::h88499bf002616f64 (vec.rs:457)
+      n1: 6785648 0x6B696E: _$LT$alloc..vec..Vec$LT$T$GT$$u20$as$u20$alloc..vec..SpecExtend$LT$$RF$T$C$core..slice..Iter$LT$T$GT$$GT$$GT$::spec_extend::h79ede309a6d70eda (vec.rs:1921)
+       n1: 6785648 0x6BC67D: alloc::vec::Vec$LT$T$GT$::extend_from_slice::h65c85fe3c70e9baa (vec.rs:1361)
+        n1: 6785648 0x73D992: aho_corasick::nfa::NFA$LT$S$GT$::copy_matches::h74bafcad7f858525 (nfa.rs:179)
+         n1: 6785648 0x7439CF: aho_corasick::nfa::Compiler$LT$S$GT$::fill_failure_transitions_standard::h0d0177d80534f451 (nfa.rs:808)
+          n1: 6785648 0x3E4AA7: aho_corasick::nfa::Compiler$LT$S$GT$::compile::h3a3fc0ec0f5bb221 (nfa.rs:600)
+           n1: 6785648 0x3E4DD9: aho_corasick::nfa::Builder::build::h731f6073fed6d0e3 (nfa.rs:532)
+            n1: 6785648 0x3EBBE9: aho_corasick::ahocorasick::AhoCorasickBuilder::build_with_size::hb46d8a2d65e6290f (ahocorasick.rs:1567)
+             n1: 6785648 0x3EC1D2: aho_corasick::ahocorasick::AhoCorasickBuilder::build::h6514a56ce83d5c7a (ahocorasick.rs:1507)
+              n1: 6785648 0x3EBA75: aho_corasick::ahocorasick::AhoCorasick::new::heaf50d23d7a5d6b6 (ahocorasick.rs:124)
+               n1: 6785648 0x3EDBC7: core::ops::function::FnOnce::call_once::hebc330fff02e7d96 (dpi.rs:37)
+                n1: 6785648 0x3F1639: lazy_static::lazy::Lazy$LT$T$GT$::get::_$u7b$$u7b$closure$u7d$$u7d$::h4cbc39a63135530e (inline_lazy.rs:28)
+                 n1: 6785648 0x3F1789: std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hcc18b4af0d717eb4 (once.rs:220)
+                  n1: 6785648 0xBB3E34: std::sync::once::Once::call_inner::hb8fe1c1776b20f38 (once.rs:387)
+                   n1: 6785648 0x3F171B: std::sync::once::Once::call_once::h2fc433c48ab57181 (once.rs:220)
+                    n1: 6785648 0x3F5660: _$LT$dpi..dpi..AC$u20$as$u20$core..ops..deref..Deref$GT$::deref::hce654dbc6c93548b (inline_lazy.rs:27)
+                     n1: 6785648 0x3F5222: dpi::dpi::dpi::hcd6e19f65d11d0c1 (dpi.rs:62)
+                      n1: 6785648 0x3ED76D: core::ops::function::FnMut::call_mut::he19e80567a7694a4 (function.rs:148)
+                       n1: 6785648 0x3F9450: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::_$u7b$$u7b$closure$u7d$$u7d$::hcdb1e43136bf2c5f (map_batch.rs:40)
+                        n1: 6785648 0x3F0AEF: core::option::Option$LT$T$GT$::map::h8afb7c2ffcb89171 (option.rs:416)
+                         n1: 6785648 0x3F9363: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::h682c04d227db4dea (map_batch.rs:35)
+                          n1: 6785648 0x3F57FB: _$LT$netbricks..operators..send_batch..SendBatch$LT$B$C$Tx$GT$$u20$as$u20$netbricks..scheduler..Executable$GT$::execute::hf83fab1817a29779 (send_batch.rs:37)
+                           n1: 6785648 0x42BBE4: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_internal::hb341ff6ef7843561 (standalone_scheduler.rs:133)
+                            n1: 6785648 0x42BE74: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_loop::h437470cd08a1b55f (standalone_scheduler.rs:158)
+                             n1: 6785648 0x42B544: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_request::h2c8897b4a846f953 (standalone_scheduler.rs:99)
+                              n0: 6785648 0x42B8D2: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_requests::h1be4825cfdff6ec8 (standalone_scheduler.rs:121)
+      n0: 5536 in 1 place, below massif's threshold (1.00%)
+   n1: 4591120 0x733377: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve_internal::h9b6855f8cf472941 (raw_vec.rs:668)
+    n1: 4591120 0x73B620: alloc::raw_vec::RawVec$LT$T$C$A$GT$::reserve::hf75c626a0968a514 (raw_vec.rs:491)
+     n1: 4591120 0x6BE760: alloc::vec::Vec$LT$T$GT$::reserve::h2872d49a3b6d16e2 (vec.rs:457)
+      n1: 4591120 0x6BE557: alloc::vec::Vec$LT$T$GT$::insert::hdece65170dbaf59d (vec.rs:882)
+       n1: 4591120 0x7460ED: aho_corasick::nfa::Transitions$LT$S$GT$::set_next_state::h3aa54061ddcb69e4 (nfa.rs:377)
+        n1: 4591120 0x73EF77: aho_corasick::nfa::State$LT$S$GT$::set_next_state::hc235c62cb4303c38 (nfa.rs:321)
+         n1: 4591120 0x3E4343: aho_corasick::nfa::Compiler$LT$S$GT$::build_trie::h0c32a4d9a11cbd28 (nfa.rs:664)
+          n1: 4591120 0x3E4953: aho_corasick::nfa::Compiler$LT$S$GT$::compile::h3a3fc0ec0f5bb221 (nfa.rs:594)
+           n1: 4591120 0x3E4DD9: aho_corasick::nfa::Builder::build::h731f6073fed6d0e3 (nfa.rs:532)
+            n1: 4591120 0x3EBBE9: aho_corasick::ahocorasick::AhoCorasickBuilder::build_with_size::hb46d8a2d65e6290f (ahocorasick.rs:1567)
+             n1: 4591120 0x3EC1D2: aho_corasick::ahocorasick::AhoCorasickBuilder::build::h6514a56ce83d5c7a (ahocorasick.rs:1507)
+              n1: 4591120 0x3EBA75: aho_corasick::ahocorasick::AhoCorasick::new::heaf50d23d7a5d6b6 (ahocorasick.rs:124)
+               n1: 4591120 0x3EDBC7: core::ops::function::FnOnce::call_once::hebc330fff02e7d96 (dpi.rs:37)
+                n1: 4591120 0x3F1639: lazy_static::lazy::Lazy$LT$T$GT$::get::_$u7b$$u7b$closure$u7d$$u7d$::h4cbc39a63135530e (inline_lazy.rs:28)
+                 n1: 4591120 0x3F1789: std::sync::once::Once::call_once::_$u7b$$u7b$closure$u7d$$u7d$::hcc18b4af0d717eb4 (once.rs:220)
+                  n1: 4591120 0xBB3E34: std::sync::once::Once::call_inner::hb8fe1c1776b20f38 (once.rs:387)
+                   n1: 4591120 0x3F171B: std::sync::once::Once::call_once::h2fc433c48ab57181 (once.rs:220)
+                    n1: 4591120 0x3F5660: _$LT$dpi..dpi..AC$u20$as$u20$core..ops..deref..Deref$GT$::deref::hce654dbc6c93548b (inline_lazy.rs:27)
+                     n1: 4591120 0x3F5222: dpi::dpi::dpi::hcd6e19f65d11d0c1 (dpi.rs:62)
+                      n1: 4591120 0x3ED76D: core::ops::function::FnMut::call_mut::he19e80567a7694a4 (function.rs:148)
+                       n1: 4591120 0x3F9450: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::_$u7b$$u7b$closure$u7d$$u7d$::hcdb1e43136bf2c5f (map_batch.rs:40)
+                        n1: 4591120 0x3F0AEF: core::option::Option$LT$T$GT$::map::h8afb7c2ffcb89171 (option.rs:416)
+                         n1: 4591120 0x3F9363: _$LT$netbricks..operators..map_batch..MapBatch$LT$B$C$T$C$M$GT$$u20$as$u20$netbricks..operators..Batch$GT$::next::h682c04d227db4dea (map_batch.rs:35)
+                          n1: 4591120 0x3F57FB: _$LT$netbricks..operators..send_batch..SendBatch$LT$B$C$Tx$GT$$u20$as$u20$netbricks..scheduler..Executable$GT$::execute::hf83fab1817a29779 (send_batch.rs:37)
+                           n1: 4591120 0x42BBE4: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_internal::hb341ff6ef7843561 (standalone_scheduler.rs:133)
+                            n1: 4591120 0x42BE74: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::execute_loop::h437470cd08a1b55f (standalone_scheduler.rs:158)
+                             n1: 4591120 0x42B544: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_request::h2c8897b4a846f953 (standalone_scheduler.rs:99)
+                              n0: 4591120 0x42B8D2: netbricks::scheduler::standalone_scheduler::StandaloneScheduler::handle_requests::h1be4825cfdff6ec8 (standalone_scheduler.rs:121)
+   n0: 109324 in 14 places, all below massif's threshold (1.00%)
+  n0: 1256 in 2 places, all below massif's threshold (1.00%)
+ n0: 679859 in 93 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=8
+#-----------
+time=295727010031
+mem_heap_B=52391559
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=330096173143
+mem_heap_B=52391559
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=361822301955
+mem_heap_B=52385415
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=404750002103
+mem_heap_B=52382343
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=430507090904
+mem_heap_B=52385415
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=469142724382
+mem_heap_B=52385415
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=512070129452
+mem_heap_B=52380807
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=563583650366
+mem_heap_B=52403847
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=601926136000
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=641279507955
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=678316678366
+mem_heap_B=52403847
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=726532157078
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=760857389525
+mem_heap_B=52382343
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=795184037523
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=850963980742
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=893871188997
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=926598568265
+mem_heap_B=52382343
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=978221150238
+mem_heap_B=52382343
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=1027858329502
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=1061614114515
+mem_heap_B=52391559
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=1091396536576
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=1122427087469
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=1152410232613
+mem_heap_B=52385415
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=1190957537953
+mem_heap_B=52385415
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=1233788784646
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=1259488089859
+mem_heap_B=52391559
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=1293754005775
+mem_heap_B=52385415
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=1349240123199
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=1382005197502
+mem_heap_B=52385415
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=1432642416065
+mem_heap_B=52385415
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=1468385260137
+mem_heap_B=52382343
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=1498387844879
+mem_heap_B=52391559
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=1536963121310
+mem_heap_B=52385415
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=1579824039303
+mem_heap_B=52380807
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=1626972248788
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=1656974734862
+mem_heap_B=52391559
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=1699787620993
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=1729704663649
+mem_heap_B=52391559
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=1772443645628
+mem_heap_B=52385415
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=1832278609948
+mem_heap_B=52382343
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=1857922195381
+mem_heap_B=52391559
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=1896387947189
+mem_heap_B=52379271
+mem_heap_extra_B=5031697
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=1900557039528
+mem_heap_B=52391559
+mem_heap_extra_B=5031705
+mem_stacks_B=0
+heap_tree=empty

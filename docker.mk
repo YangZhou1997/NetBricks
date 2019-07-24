@@ -23,6 +23,10 @@ run: pull-sandbox
 		-m 1g \
 		-v $(BASE_DIR)/../jemalloc:/opt/jemalloc \
 		-v $(BASE_DIR)/../traffic:/opt/traffic \
+		-v /usr/local/bin/heaptrack:/usr/local/bin/heaptrack \
+		-v /usr/local/lib/heaptrack:/usr/local/lib/heaptrack \
+		-v /usr/lib/x86_64-linux-gnu/libunwind.so.8:/usr/lib/x86_64-linux-gnu/libunwind.so.8 \
+		-v /usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1:/usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1 \
 		$(SANDBOX) /bin/bash
 
 run-tests: pull-sandbox

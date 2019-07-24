@@ -19,6 +19,7 @@ end_string = ' Mpps'
 def task_exec(task, pktgen_type, throughput_res):
 	print "start task %s" % (task,)
 	os.system(CmdNetBricks['start'].format(task=task))
+	time.sleep(5) # wait for task gets actually started
 
 	print "start pktgen %s" % (pktgen_type,)
 	pktgen_results = os.popen(CmdPktgen['start'].format(type=pktgen_type)).read()
@@ -38,22 +39,41 @@ def task_exec(task, pktgen_type, throughput_res):
 
 	os.system(CmdNetBricks['kill'].format(task=task))
 	print "kill task %s" % (task,)
+	time.sleep(5) # wait for the port being restored.
 
 	print colored("throughput_val: %lf" % (throughput_val,), 'blue')
 	throughput_res.write(task + "," + pktgen_type + "," + str(throughput_val) + "\n")
+	throughput_res.flush()
 	return 0
+
+tasks = ["acl-fw", "dpi", "lpm", "maglev", "monitoring", "nat-tcp-v4"]
+pktgens = ["ICTF", "CAIDA64", "CAIDA256", "CAIDA512", "CAIDA1024"]
+tasks_ipsec = ["acl-fw-ipsec", "dpi-ipsec", "lpm-ipsec", "maglev-ipsec", "monitoring-ipsec", "nat-tcp-v4-ipsec"]
+pktgens_ipsec = ["ICTF_IPSEC", "CAIDA64_IPSEC", "CAIDA256_IPSEC", "CAIDA512_IPSEC", "CAIDA1024_IPSEC"]
 
 if __name__ == '__main__':
 	throughput_res = open("throughput-eva/throughput.txt", 'w')
-	
-	# for task_cur in ["acl-fw", "dpi", "lpm", "maglev", "monitoring", "nat-tcp-v4", "acl-fw-ipsec", "dpi-ipsec", "lpm-ipsec", "maglev-ipsec", "monitoring-ipsec", "nat-tcp-v4-ipsec"]:
-	# 	for pktgen_type in ["ICTF", "CAIDA64", "CAIDA256", "CAIDA512", "CAIDA1024", "ICTF_IPSEC", "CAIDA64_IPSEC", "CAIDA256_IPSEC", "CAIDA512_IPSEC", "CAIDA1024_IPSEC"]:
-	task = "macswap"
-	pktgen_type = "CAIDA64"
-	status = task_exec(task, pktgen_type, throughput_res)
-	if status == -1:
-		print colored("%s %s fails" % (task, pktgen_type), 'red')
-	else:
-		print colored("%s %s succeeds" % (task, pktgen_type), 'green')
+	run_count = 0
+	fail_count = 0
+	for task in tasks: 
+		for pktgen_type in pktgens: 
+			run_count += 1
+			status = task_exec(task, pktgen_type, throughput_res)
+			if status == -1:
+				fail_count += 1
+				print colored("%s %s fails" % (task, pktgen_type), 'red')
+			else:
+				print colored("%s %s succeeds" % (task, pktgen_type), 'green')
 
+	for task in tasks_ipsec: 
+		for pktgen_type in pktgens_ipsec: 
+			run_count += 1
+			status = task_exec(task, pktgen_type, throughput_res)
+			if status == -1:
+				fail_count += 1
+				print colored("%s %s fails" % (task, pktgen_type), 'red')
+			else:
+				print colored("%s %s succeeds" % (task, pktgen_type), 'green')
+
+	print colored(("success runs: %d/%d", (run_count - fail_count), run_count), 'green')
 	throughput_res.close()

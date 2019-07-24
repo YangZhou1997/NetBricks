@@ -1,6 +1,0 @@
-acl-fw,ICTF,1.9274
-acl-fw,CAIDA64,4.5591
-acl-fw,CAIDA256,4.406
-acl-fw,CAIDA512,2.3482
-acl-fw,CAIDA1024,1.1972
-dpi,ICTF,0.2215

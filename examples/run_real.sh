@@ -9,7 +9,11 @@ fi
 
 echo $TASK
 
-# $HOME/NetBricks/target/$MODE/$TASK -f $TASK/config.toml
-$HOME/NetBricks/target/$MODE/$TASK -p $PORT -c $CORE --pool-size=$POOL_SIZE -d $TIME
+# 1, 2, 4
+if [ $# -eq 2 ]; then
+    $HOME/NetBricks/target/$MODE/$TASK -f ./config_$2core.toml
+else
+    $HOME/NetBricks/target/$MODE/$TASK -p $PORT -c $CORE --pool-size=$POOL_SIZE -d $TIME
+fi
 
 unset RUST_BACKTRACE

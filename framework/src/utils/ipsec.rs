@@ -36,6 +36,47 @@ pub const ESP_HMAC_LEN: usize = 12;
 pub const IP_HEADER_LENGTH: usize = 20;
 pub const ICV_LEN_SHA256: usize = 16;
 
+pub const AES_GCM_IV_LENGTH: usize = 16;
+pub const ICV_LEN_GCM128: usize = 16;
+
+#[inline]
+fn my_cipher(
+    t: Cipher,
+    mode: Mode,
+    key: &[u8],
+    iv: Option<&[u8]>,
+    data: &[u8],
+) -> Result<Vec<u8>, ErrorStack> {
+    let mut c = Crypter::new(t, mode, key, iv)?;
+    c.pad(false);
+    let mut out = vec![0; data.len() + t.block_size()];
+    let count = c.update(data, &mut out)?;
+    let rest = c.finalize(&mut out[count..])?;
+    out.truncate(count + rest);
+    Ok(out)
+}
+
+
+#[inline]
+pub fn my_decrypt(
+    t: Cipher,
+    key: &[u8],
+    iv: Option<&[u8]>,
+    data: &[u8],
+) -> Result<Vec<u8>, ErrorStack> {
+    my_cipher(t, Mode::Decrypt, key, iv, data)
+}
+
+#[inline]
+pub fn my_encrypt(
+    t: Cipher,
+    key: &[u8],
+    iv: Option<&[u8]>,
+    data: &[u8],
+) -> Result<Vec<u8>, ErrorStack> {
+    my_cipher(t, Mode::Encrypt, key, iv, data)
+}
+
 // pktptr points to the start of the cleartext ip header.
 // after output, output points to the start of the ESP header
 // This function will return outlen: u16
@@ -76,7 +117,6 @@ pub fn aes_cbc_sha256_encrypt(pktptr: &[u8], esphdr: &[u8], output: &mut [u8]) -
     
     Ok(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH + ciphertext_len + ICV_LEN_SHA256)
 }
-
 
 // pktptr points to the start of the cleartext ip header.
 // after output, output points to the start of the ESP header
@@ -120,45 +160,6 @@ pub fn aes_cbc_sha256_encrypt_opt(pktptr: &mut [u8], esphdr: &[u8]) -> Result<us
     pktptr[(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH + ciphertext_len)..(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH + ciphertext_len + ICV_LEN_SHA256)].copy_from_slice(&hmac[..ICV_LEN_SHA256]);
     
     Ok(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH + ciphertext_len + ICV_LEN_SHA256)
-}
-
-
-#[inline]
-fn my_cipher(
-    t: Cipher,
-    mode: Mode,
-    key: &[u8],
-    iv: Option<&[u8]>,
-    data: &[u8],
-) -> Result<Vec<u8>, ErrorStack> {
-    let mut c = Crypter::new(t, mode, key, iv)?;
-    c.pad(false);
-    let mut out = vec![0; data.len() + t.block_size()];
-    let count = c.update(data, &mut out)?;
-    let rest = c.finalize(&mut out[count..])?;
-    out.truncate(count + rest);
-    Ok(out)
-}
-
-
-#[inline]
-pub fn my_decrypt(
-    t: Cipher,
-    key: &[u8],
-    iv: Option<&[u8]>,
-    data: &[u8],
-) -> Result<Vec<u8>, ErrorStack> {
-    my_cipher(t, Mode::Decrypt, key, iv, data)
-}
-
-#[inline]
-pub fn my_encrypt(
-    t: Cipher,
-    key: &[u8],
-    iv: Option<&[u8]>,
-    data: &[u8],
-) -> Result<Vec<u8>, ErrorStack> {
-    my_cipher(t, Mode::Encrypt, key, iv, data)
 }
 
 // pktptr points to the start of the ESP header
@@ -246,6 +247,77 @@ pub fn aes_cbc_sha256_decrypt_opt(pktptr: &mut [u8], compdigest: bool) -> Result
 
     Ok(cleartext_len + ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH)
 }
+
+
+pub fn aes_gcm128_encrypt(pktptr: &[u8], esphdr: &[u8], output: &mut [u8]) -> Result<usize, CryptoError>
+{
+    let pktlen = pktptr.len();
+    if pktlen >(MAX_PKT_SIZE - ESP_HEADER_LENGTH - AES_GCM_IV_LENGTH - ICV_LEN_GCM128) as usize
+    {
+        println!("Packet is too big to handle");
+        stdout().flush().unwrap();
+        return Err(CryptoError::PktlenError);
+    }
+    output[..ESP_HEADER_LENGTH].copy_from_slice(esphdr);
+    output[ESP_HEADER_LENGTH..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)].copy_from_slice(AES_IV);
+    let hmac: &mut [u8] = &mut [0u8; 16];
+
+    let cipher = Cipher::aes_128_gcm();
+    let ciphertext = encrypt_aead(cipher, AES_KEY, Some(AES_IV), &output[..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)], 
+        pktptr, hmac).unwrap();
+    let ciphertext_len = ciphertext.len();
+
+    output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen)..].copy_from_slice(hmac);
+    output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ciphertext_len)].copy_from_slice(&ciphertext[..]);
+    if ciphertext_len != pktlen
+    {
+        println!("cleartext pktlen: {} vs. ciphertext pktlen: {}", pktptr.len(), ciphertext_len);
+        println!("AES encryption errors");
+        stdout().flush().unwrap();
+        return Err(CryptoError::AESEncryptError);
+    }
+    Ok(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ciphertext_len + ICV_LEN_GCM128)
+}
+
+
+pub fn aes_gcm128_decrypt(pktptr: &[u8], output: &mut [u8], compdigest: bool) -> Result<usize, CryptoError>
+{
+    let pktlen = pktptr.len();    
+    if pktlen < (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ICV_LEN_GCM128) {
+        println!("Decrypt: Packet length is not proper");
+        stdout().flush().unwrap();
+        return Err(CryptoError::PktlenError);
+    }
+    // let hmac: &mut [u8] = &mut [0u8; 16];
+    let cipher = Cipher::aes_128_gcm();
+    let cleartext = decrypt_aead(cipher, AES_KEY, Some(AES_IV), &pktptr[0..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)], 
+        &pktptr[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(pktlen - ICV_LEN_GCM128)], &pktptr[(pktlen - ICV_LEN_GCM128)..]).unwrap();
+
+    // if compdigest
+    // {
+    //     if !memcmp::eq(&hmac[..ICV_LEN_SHA256], &pktptr[(pktlen - ICV_LEN_GCM128)..])
+    //     {
+    //         println!("INBOUND Mac Mismatch");
+    //         stdout().flush().unwrap();
+    //         return Err(CryptoError::HmacMismatch);
+    //     }
+    // }
+
+    let cleartext_len = cleartext.len();
+    if cleartext_len != pktlen - ESP_HEADER_LENGTH - AES_GCM_IV_LENGTH - ICV_LEN_GCM128
+    {
+        println!("ciphertext pktlen: {} vs. cleartext pktlen: {}", pktlen - ESP_HEADER_LENGTH - AES_GCM_IV_LENGTH - ICV_LEN_GCM128, cleartext_len);
+        println!("AES decryption errors");
+        stdout().flush().unwrap();
+        return Err(CryptoError::AESDecryptError);
+    }
+    output[..(cleartext_len)].copy_from_slice(&cleartext[..]);
+
+    Ok(cleartext_len + ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH)
+}
+
+
+
 
 #[inline]
 pub fn get_flow(pkt: &[u8]) -> Flow{

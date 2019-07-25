@@ -9,7 +9,7 @@ fi
 
 echo $TASK
 
-# 1, 2, 4
+# 1, 2, 3, 4
 if [ $# -eq 2 ]; then
     $HOME/NetBricks/target/$MODE/$TASK -f ./config_$2core.toml
 else

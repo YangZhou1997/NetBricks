@@ -739,6 +739,7 @@ pub fn encrypt_aead(
     c.aad_update(aad)?;
     let count = c.update(data, &mut out)?;
     let rest = c.finalize(&mut out[count..])?;
+
     c.get_tag(tag)?;
     out.truncate(count + rest);
     Ok(out)

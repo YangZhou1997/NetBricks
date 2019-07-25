@@ -5,6 +5,10 @@ use openssl::pkey::PKey;
 use openssl::sign::Signer;
 use openssl::error::ErrorStack;
 
+use mbedtls::cipher::Cipher as CipherMbed;
+use mbedtls::cipher::Authenticated;
+use mbedtls::cipher::raw;
+
 use std::io::stdout;
 use std::io::Write;
 
@@ -249,7 +253,7 @@ pub fn aes_cbc_sha256_decrypt_opt(pktptr: &mut [u8], compdigest: bool) -> Result
 }
 
 
-pub fn aes_gcm128_encrypt(pktptr: &[u8], esphdr: &[u8], output: &mut [u8]) -> Result<usize, CryptoError>
+pub fn aes_gcm128_encrypt_openssl(pktptr: &[u8], esphdr: &[u8], output: &mut [u8]) -> Result<usize, CryptoError>
 {
     let pktlen = pktptr.len();
     if pktlen >(MAX_PKT_SIZE - ESP_HEADER_LENGTH - AES_GCM_IV_LENGTH - ICV_LEN_GCM128) as usize
@@ -280,7 +284,7 @@ pub fn aes_gcm128_encrypt(pktptr: &[u8], esphdr: &[u8], output: &mut [u8]) -> Re
 }
 
 
-pub fn aes_gcm128_decrypt(pktptr: &[u8], output: &mut [u8], compdigest: bool) -> Result<usize, CryptoError>
+pub fn aes_gcm128_decrypt_openssl(pktptr: &[u8], output: &mut [u8], compdigest: bool) -> Result<usize, CryptoError>
 {
     let pktlen = pktptr.len();    
     if pktlen < (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ICV_LEN_GCM128) {
@@ -313,7 +317,62 @@ pub fn aes_gcm128_decrypt(pktptr: &[u8], output: &mut [u8], compdigest: bool) ->
     }
     output[..(cleartext_len)].copy_from_slice(&cleartext[..]);
 
-    Ok(cleartext_len + ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH)
+    Ok(cleartext_len + ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)
+}
+
+pub fn aes_gcm128_encrypt_mbedtls(pktptr: &[u8], esphdr: &[u8], output: &mut [u8]) -> Result<usize, CryptoError>
+{
+    let pktlen = pktptr.len();
+    if pktlen >(MAX_PKT_SIZE - ESP_HEADER_LENGTH - AES_GCM_IV_LENGTH - ICV_LEN_GCM128) as usize
+    {
+        println!("Packet is too big to handle");
+        stdout().flush().unwrap();
+        return Err(CryptoError::PktlenError);
+    }
+    let hmac: &mut [u8] = &mut [0u8; 16];
+    let aad: &mut [u8] = &mut [0u8; (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)];
+    aad[..ESP_HEADER_LENGTH].copy_from_slice(esphdr);
+    aad[ESP_HEADER_LENGTH..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)].copy_from_slice(AES_IV);
+    
+    let cipher = CipherMbed::<_, Authenticated, _>::new(
+        raw::CipherId::Aes,
+        raw::CipherMode::GCM,
+        (AES_KEY.len() * 8) as _,
+    ).unwrap();
+
+    let cipher = cipher.set_key_iv(AES_KEY, AES_IV).unwrap();
+    cipher.encrypt_auth(aad, pktptr, 
+        &mut output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen)], hmac).unwrap();
+    
+    output[..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)].copy_from_slice(aad);
+    output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen)..].copy_from_slice(hmac);
+    
+    Ok(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen + ICV_LEN_GCM128)
+}
+
+pub fn aes_gcm128_decrypt_mbedtls(pktptr: &[u8], output: &mut [u8], compdigest: bool) -> Result<usize, CryptoError>
+{
+    let pktlen = pktptr.len();    
+    if pktlen < (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ICV_LEN_GCM128) {
+        println!("Decrypt: Packet length is not proper");
+        stdout().flush().unwrap();
+        return Err(CryptoError::PktlenError);
+    }
+
+    let cipher = CipherMbed::<_, Authenticated, _>::new(
+        raw::CipherId::Aes,
+        raw::CipherMode::GCM,
+        (AES_KEY.len() * 8) as _,
+    ).unwrap();
+
+    let cipher = cipher.set_key_iv(AES_KEY, AES_IV).unwrap();
+    if let Ok(_plain_text) = cipher.decrypt_auth(&pktptr[0..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)], &pktptr[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(pktlen - ICV_LEN_GCM128)],
+         &mut output[..(pktlen - (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ICV_LEN_GCM128))], &pktptr[(pktlen - ICV_LEN_GCM128)..])
+    {
+        let cleartext_len = pktlen - ESP_HEADER_LENGTH - AES_GCM_IV_LENGTH - ICV_LEN_GCM128;
+        return Ok(cleartext_len + ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH);
+    }
+    Ok(0)
 }
 
 

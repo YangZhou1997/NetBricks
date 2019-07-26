@@ -772,7 +772,7 @@ pub fn decrypt_aead(
 
     if !t.is_ccm() {
         c.set_tag(tag)?;
-        // rest = c.finalize(&mut out[count..])?;
+        rest = c.finalize(&mut out[count..])?;
     }
 
     out.truncate(count + rest);

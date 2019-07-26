@@ -9,7 +9,7 @@ CmdNetBricks = {
 }
 
 CmdPktgen = {
-	'start': 'ssh -i /home/yangz/.ssh/id_rsa yangz@10.243.38.93 "cd ./pktgen/dpdk_zeroloss_dyn/ && bash run.sh ../l2.conf 0.1 32 60 1 {type}"',
+	'start': 'ssh -i /home/yangz/.ssh/id_rsa yangz@10.243.38.93 "cd ./pktgen/dpdk_zeroloss_dyn/ && bash run_netbricks.sh ../l2.conf 0.1 32 60 1 {type}"',
 	'kill': 'sudo pkill "ssh yangz@10.243.38.93" 2>/dev/null'
 }
 
@@ -62,9 +62,21 @@ if __name__ == '__main__':
 
 	run_count = 0
 	fail_count = 0
-	for i in range(10):
-		for task in tasks: 
-			for pktgen_type in pktgens: 
+	# for i in range(10):
+	# 	for task in tasks: 
+	# 		for pktgen_type in pktgens: 
+	# 			for num_queue in num_queues: 
+	# 				run_count += 1
+	# 				status = task_exec(task, pktgen_type, num_queue, throughput_res)
+	# 				if status == -1:
+	# 					fail_count += 1
+	# 					print colored("%s %s %s fails" % (task, pktgen_type, num_queue), 'red')
+	# 				else:
+	# 					print colored("%s %s %s succeeds" % (task, pktgen_type, num_queue), 'green')
+	
+	for i in range(1):
+		for task in tasks_ipsec: 
+			for pktgen_type in pktgens_ipsec: 
 				for num_queue in num_queues: 
 					run_count += 1
 					status = task_exec(task, pktgen_type, num_queue, throughput_res)
@@ -73,17 +85,6 @@ if __name__ == '__main__':
 						print colored("%s %s %s fails" % (task, pktgen_type, num_queue), 'red')
 					else:
 						print colored("%s %s %s succeeds" % (task, pktgen_type, num_queue), 'green')
-
-	# for task in tasks_ipsec: 
-	# 	for pktgen_type in pktgens_ipsec: 
-	# 		for num_queue in num_queues: 
-	# 			run_count += 1
-	# 			status = task_exec(task, pktgen_type, num_queue, throughput_res)
-	# 			if status == -1:
-	# 				fail_count += 1
-	# 				print colored("%s %s %s fails" % (task, pktgen_type, num_queue), 'red')
-	# 			else:
-	# 				print colored("%s %s %s succeeds" % (task, pktgen_type, num_queue), 'green')
 
 	print colored(("success runs: %d/%d", (run_count - fail_count), run_count), 'green')
 	throughput_res.close()

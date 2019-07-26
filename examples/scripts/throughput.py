@@ -7,7 +7,7 @@ from collections import defaultdict
 import brewer2mpl
 
  # brewer2mpl.get_map args: set name  set type  number of colors
-bmap = brewer2mpl.get_map('Set2', 'qualitative', 7)
+bmap = brewer2mpl.get_map('Paired', 'qualitative', 12)
 colors = bmap.mpl_colors
  
 params = {
@@ -84,7 +84,7 @@ if __name__ == '__main__':
 
     N = len(pktgens)
     ind = np.arange(N) * 10 + 10    # the x locations for the groups    
-    width = 1       # the width of the bars: can also be len(x) sequence
+    width = 6.0/len(num_queues)       # the width of the bars: can also be len(x) sequence
 
     for task in tasks:
         cnt = 0

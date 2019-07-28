@@ -1,0 +1,16 @@
+      0-  6ffff Reg  r-x  (data) meas=all
+  70000-  ddfff Reg  r--  (data) meas=all
+  de000-  e6fff Reg  rw-  (data) meas=all
+  e7000-  e7fff Reg  rw- (empty) meas=all
+  e8000-15e7fff Reg  rw- (empty) meas=none
+15e8000-15f7fff (unmapped)
+15f8000-2af7fff Reg  rw- (empty) meas=none
+2af8000-2af8fff Reg  rw-  (data) meas=all
+2af9000-2af9fff Tcs  ---  (data) meas=all
+2afa000-2afafff Reg  rw- (empty) meas=none
+2afb000-2b0afff (unmapped)
+2b0b000-400afff Reg  rw- (empty) meas=none
+400b000-400bfff Reg  rw-  (data) meas=all
+400c000-400cfff Tcs  ---  (data) meas=all
+400d000-400dfff Reg  rw- (empty) meas=none
+400e000-7ffffff (unmapped)

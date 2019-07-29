@@ -20,6 +20,7 @@ use std::hash::BuildHasherDefault;
 use std::net::IpAddr;
 use std::net::Ipv4Addr;
 use std::cell::RefCell;
+use std::fmt::Display;
 
 type FnvHash = BuildHasherDefault<FnvHasher>;
 
@@ -123,15 +124,15 @@ impl Acl {
     }
 }
 
-fn install<S: Scheduler + Sized>(ports: Vec<CacheAligned<PortQueue>>, sched: &mut S) {
+fn install<T, S>(ports: Vec<T>, sched: &mut S)
+where
+    T: PacketRx + PacketTx + Display + Clone + 'static,
+    S: Scheduler + Sized,
+{
     for port in &ports {
-        println!(
-            "Receiving port {} rxq {} txq {}",
-            port.port.mac_address(),
-            port.rxq(),
-            port.txq()
-        );
+        println!("Receiving port {}", port);
     }
+
     let pipelines: Vec<_> = ports
         .iter()
         .map(|port| {

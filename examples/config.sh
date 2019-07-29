@@ -7,7 +7,7 @@ HOME=/home/yangz
 # HOME=/opt
 
 TRAFFIC=$HOME/traffic/ictf2010_trim/merged.pcap
-# TRAFFIC=$HOME/traffic/ictf2010/merged.pcap
+# TRAFFIC=$HOME/traffic/caida18_real.pcap
 
 
 export LD_LIBRARY_PATH="$HOME/NetBricks/native:/opt/dpdk/dpdk-stable-17.08/build/lib:"

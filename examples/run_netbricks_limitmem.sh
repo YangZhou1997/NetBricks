@@ -1,0 +1,1 @@
+env LD_LIBRARY_PATH="/home/yangz/NetBricks/native:/opt/dpdk/dpdk-stable-17.08/build/lib:" /home/yangz/NetBricks/target/debug/macswap -p dpdk:eth_pcap0,rx_pcap=/home/yangz/traffic/caida18_real.pcap  -c 0 --pool-size=512 -d 1

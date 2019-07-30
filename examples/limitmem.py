@@ -139,20 +139,22 @@ if __name__ == '__main__':
 	
 	for task in tasks:
 		for pktgen_type in pktgen_types:
-			low_mem = 1 #KB
-			high_mem = 4 * 1024 * 1024 # KB
-			min_mem = 4 #KB
-			while 1 and (high_mem - low_mem) > min_mem:
-				cur_mem_limit = (low_mem + high_mem) / 2
-				res = run_limitmem(task, pktgen_type, int(cur_mem_limit))
-				if res == -1:
-					low_mem = cur_mem_limit
-				else:
-					high_mem = cur_mem_limit
+			# low_mem = 1 #KB
+			# high_mem = 4 * 1024 * 1024 # KB
+			# min_mem = 4 #KB
+			# while 1 and (high_mem - low_mem) > min_mem:
+			# 	cur_mem_limit = (low_mem + high_mem) / 2
+			# 	res = run_limitmem(task, pktgen_type, int(cur_mem_limit))
+			# 	if res == -1:
+			# 		low_mem = cur_mem_limit
+			# 	else:
+			# 		high_mem = cur_mem_limit
 
-			print low_mem, cur_mem_limit, high_mem
-			print "using %lf to retest" % (high_mem)
-			res = run_limitmem(task, pktgen_type, high_mem)
+			# print low_mem, cur_mem_limit, high_mem
+			# print "using %lf to retest" % (high_mem)
+			# res = run_limitmem(task, pktgen_type, high_mem)
+
+			res = run_limitmem(task, pktgen_type, 4 * 1024 * 1024)
 
 			if res == -1:
 				print "retesting fails"
@@ -164,11 +166,12 @@ if __name__ == '__main__':
 			
 			print total_mem_usages
 			print colored("[Cgroup direct]: peak_total_mem_usage: " + str(max_total_mem_usages), 'green')
-			print colored("[Binary search]: peak_total_mem_usage: " + str(high_mem / 1024.0), 'green')
+			# print colored("[Binary search]: peak_total_mem_usage: " + str(high_mem / 1024.0), 'green')
 
 			limitmem_res.write(task + "," + pktgen_type + "\n")
 			limitmem_res.write(str(total_mem_usages) + "\n")
-			limitmem_res.write(str(max_total_mem_usages) + "," + str(high_mem / 1024.0) + "\n")
+			# limitmem_res.write(str(max_total_mem_usages) + "," + str(high_mem / 1024.0) + "\n")
+			limitmem_res.write(str(max_total_mem_usages) + "\n")
 			limitmem_res.flush()
 	
 	limitmem_res.close()

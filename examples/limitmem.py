@@ -134,9 +134,9 @@ if __name__ == '__main__':
 	now = datetime.datetime.now()
 	limitmem_res = open("./memory-profiling/cgroup-log/memusage.txt_" + now.isoformat(), 'w')
 
-	tasks = ["macswap-ipsec"]
-	pktgen_types = ["chunck0_ipsec.dat"]
-
+	tasks = ["acl-fw-ipsec", "dpi-ipsec", "lpm-ipsec", "maglev-ipsec", "monitoring-ipsec", "nat-tcp-v4-ipsec"]
+	pktgen_types = map(lambda x: "chunck%d_ipsec.dat" % (x,), range(264))
+	
 	for task in tasks:
 		for pktgen_type in pktgen_types:
 			low_mem = 1 #KB

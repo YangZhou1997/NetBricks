@@ -28,7 +28,7 @@ CmdGetCgroupMaxMemUsage = {
 }
 
 CmdPktgen = {
-	'start': 'ssh -i /home/yangz/.ssh/id_rsa yangz@10.243.38.93 "cd ./pktgen/dpdk_zeroloss_dyn/ && bash run_netbricks.sh ../l2.conf 0.1 32 60 1 {type}"',
+	'start': 'ssh -i /home/yangz/.ssh/id_rsa yangz@10.243.38.93 "cd ./pktgen/dpdk_zeroloss_dyn_chunck/ && bash run_netbricks.sh ../l2.conf 0.1 32 60 1 {type}"',
 	'kill': 'sudo pkill "ssh yangz@10.243.38.93" 2>/dev/null'
 }
 
@@ -134,8 +134,8 @@ if __name__ == '__main__':
 	now = datetime.datetime.now()
 	limitmem_res = open("./memory-profiling/cgroup-log/memusage.txt_" + now.isoformat(), 'w')
 
-	tasks = ["macswap"]
-	pktgen_types = ["ICTF"]
+	tasks = ["macswap-ipsec"]
+	pktgen_types = ["chunck0_ipsec.dat"]
 
 	for task in tasks:
 		for pktgen_type in pktgen_types:

@@ -9,7 +9,7 @@ import brewer2mpl
  # brewer2mpl.get_map args: set name  set type  number of colors
 bmap = brewer2mpl.get_map('Paired', 'qualitative', 12)
 colors = bmap.mpl_colors
- 
+
 params = {
     'axes.labelsize': 18,
     'font.size': 18,
@@ -43,7 +43,7 @@ def load(filePath):
             # print entry_array
             t_val[entry_array[0]][entry_array[1]][entry_array[2]].append(float(entry_array[3]))
             raw_entry = f.readline()
-            
+
 
 # then process data to get graph drawing data
 def process_draw_data():
@@ -74,16 +74,15 @@ def get_draw_data_for_task_queue(task, num_queue, pktgens):
     return t_vec_min, t_vec_med, t_vec_max
 
 # finally, draw graph by passing pktgen vector (index vector), and multiple throughput vector
-# def 
+# def
 
 if __name__ == '__main__':
-    load("../throughput-eva/throughput.txt_2019-07-25T01:56:38.396098")
-    load("../throughput-eva/throughput.txt_2019-07-26T10:11:07.941336")
-
+    load("../throughput-eva/throughput.txt_2019-07-29T23:25:08.761585")
+    load("../throughput-eva/throughput.txt_2019-07-30T10:08:28.249170")
     process_draw_data()
 
     N = len(pktgens)
-    ind = np.arange(N) * 10 + 10    # the x locations for the groups    
+    ind = np.arange(N) * 10 + 10    # the x locations for the groups
     width = 6.0/len(num_queues)       # the width of the bars: can also be len(x) sequence
 
     for task in tasks:

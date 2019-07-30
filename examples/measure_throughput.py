@@ -16,11 +16,17 @@ CmdPktgen = {
 start_string = 'pkt sent, '
 end_string = ' Mpps'
 
+def kill_keyword(task):
+	if "-ipsec" in task:
+		return task[0: -6]
+	else:
+		return task
 
 def task_exec(task, pktgen_types, num_queue, repeat_num, throughput_res):
 	# repeat the booting until succeeding
 	fail_count_inner = 0
 	test_pktgen = pktgen_types[0]
+	# sometimes, failed dpdk application can reclaim hugepage.
 	while(1):
 		print "start task %s" % (task,)
 		os.system(CmdNetBricks['start'].format(task=task, num_queue=num_queue))
@@ -36,13 +42,13 @@ def task_exec(task, pktgen_types, num_queue, repeat_num, throughput_res):
 		if start_index == -1:
 			print colored("%s %s %s fails" % (task, test_pktgen, num_queue), 'red')
 			fail_count_inner += 1
-			os.system(CmdNetBricks['kill'].format(task=task))
+			os.system(CmdNetBricks['kill'].format(task=kill_keyword(task)))
 			time.sleep(5) # wait for the port being restored.
 			continue
 		end_index = pktgen_results.find(end_string, start_index)
 		if end_index == -1:
 			print colored("%s %s %s fails" % (task, test_pktgen, num_queue), 'red')
-			os.system(CmdNetBricks['kill'].format(task=task))
+			os.system(CmdNetBricks['kill'].format(task=kill_keyword(task)))
 			time.sleep(5) # wait for the port being restored.
 			fail_count_inner += 1
 			continue
@@ -69,7 +75,8 @@ def task_exec(task, pktgen_types, num_queue, repeat_num, throughput_res):
 			throughput_res.write(task + "," + pktgen_type + "," + str(num_queue) + "," + str(throughput_val) + "\n")
 			throughput_res.flush()
 
-	os.system(CmdNetBricks['kill'].format(task=task))
+	os.system(CmdNetBricks['kill'].format(task=kill_keyword(task)))
+	time.sleep(5) # wait for the port being restored.
 
 	return 0
 
@@ -79,6 +86,7 @@ tasks_ipsec = ["acl-fw-ipsec", "dpi-ipsec", "lpm-ipsec", "maglev-ipsec", "monito
 pktgens_ipsec = ["ICTF_IPSEC", "CAIDA64_IPSEC", "CAIDA256_IPSEC", "CAIDA512_IPSEC", "CAIDA1024_IPSEC"]
 
 num_queues = [1, 2, 3, 4, 5, 6]
+
 # ps -ef | grep release
 # sudo kill -9 ####
 
@@ -89,13 +97,14 @@ if __name__ == '__main__':
 
 	run_count = 0
 	fail_count = 0
-	for task in tasks:
-		for num_queue in num_queues:
-			run_count += 1
-			status = task_exec(task, pktgens, num_queue, 10, throughput_res)
-			if status == -1:
-				fail_count += 1
-				fail_cases.append(task + " " + num_queue)
+
+	# for task in tasks:
+	# 	for num_queue in num_queues:
+	# 		run_count += 1
+	# 		status = task_exec(task, pktgens, num_queue, 10, throughput_res)
+	# 		if status == -1:
+	# 			fail_count += 1
+	# 			fail_cases.append(task + " " + num_queue)
 
 	
 	for task in tasks_ipsec:

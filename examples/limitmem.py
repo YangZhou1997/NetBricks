@@ -10,8 +10,9 @@ from threading import Event, Thread
 # DPDK_MEM = (5 * 2 * 1024 * 1024)
 
 # seems you cannot pass 1.2M to cgroup. 
+# you should first do "export TMPDIR=/tmp"
 CmdLimitMemBg = {
-	'start': './limitmem {mem}K bash run_real.sh {task} {num_queue} 2>/dev/null &',
+	'start': 'export TMPDIR=/tmp && ./limitmem {mem}K bash run_real.sh {task} {num_queue} 2>/dev/null &',
 	'kill': 'sudo pkill limitmem && sudo pkill head && sudo pkill {task}'
 }
 
@@ -28,7 +29,8 @@ CmdGetCgroupMaxMemUsage = {
 }
 
 CmdPktgen = {
-	'start': 'ssh -i /home/yangz/.ssh/id_rsa yangz@10.243.38.93 "cd ./pktgen/dpdk_zeroloss_dyn_chunck/ && bash run_netbricks.sh ../l2.conf 0.1 32 60 1 {type}"',
+	'start': 'ssh -i /home/yangz/.ssh/id_rsa yangz@10.243.38.93 "cd ./pktgen/dpdk_zeroloss_dyn/ && bash run_netbricks.sh ../l2.conf 0.1 32 60 1 {type}"',
+	'start_mon': 'ssh -i /home/yangz/.ssh/id_rsa yangz@10.243.38.93 "cd ./pktgen/dpdk_zeroloss_dyn_chunck/ && bash run_netbricks.sh ../l2.conf 0.1 32 60 1 {type}"',
 	'kill': 'sudo pkill "ssh yangz@10.243.38.93" 2>/dev/null'
 }
 
@@ -69,6 +71,12 @@ def cgroup_polling(cgroup_name):
 		max_memusage_results = os.popen(CmdGetCgroupMaxMemUsage['start'].format(cgroup_name=cgroup_name)).read()
 		max_mem_usage = int(max_memusage_results.rstrip("\n").split()[1])
 
+def kill_keyword(task):
+	if "-ipsec" in task:
+		return task[0: -6]
+	else:
+		return task
+
 def run_limitmem(task, pktgen, memsize):
 	print colored("run_limitmem: task" + " " + pktgen + " " + str(memsize) + "KB", 'yellow')
 
@@ -95,7 +103,10 @@ def run_limitmem(task, pktgen, memsize):
 	print "pooling starts"
 
 	print "start pktgen %s" % (pktgen_type,)
-	pktgen_results = os.popen(CmdPktgen['start'].format(type=pktgen_type)).read()
+	if task == "monitoring-ipsec":
+		pktgen_results = os.popen(CmdPktgen['start_mon'].format(type=pktgen_type)).read()
+	else:
+		pktgen_results = os.popen(CmdPktgen['start'].format(type=pktgen_type)).read()
 	print "end pktgen %s" % (pktgen_type,)
 	print pktgen_results
 
@@ -107,14 +118,14 @@ def run_limitmem(task, pktgen, memsize):
 		print "pktgen errors, retrying..."
 		stop_mark = True
 		polling.join()
-		os.system(CmdLimitMemBg['kill'].format(task = task))
+		os.system(CmdLimitMemBg['kill'].format(task = kill_keyword(task)))
 		return -1
 	end_index = pktgen_results.find(end_string, start_index)
 	if end_index == -1:
 		print "pktgen errors, retrying..."
 		stop_mark = True
 		polling.join()
-		os.system(CmdLimitMemBg['kill'].format(task = task))
+		os.system(CmdLimitMemBg['kill'].format(task = kill_keyword(task)))
 		return -1
 
 	throughput_val = pktgen_results[start_index: end_index]
@@ -123,7 +134,7 @@ def run_limitmem(task, pktgen, memsize):
 
 	stop_mark = True
 	polling.join()
-	os.system(CmdLimitMemBg['kill'].format(task = task))
+	os.system(CmdLimitMemBg['kill'].format(task = kill_keyword(task)))
 	time.sleep(5) # wait for the port being restored.
 
 
@@ -134,9 +145,34 @@ if __name__ == '__main__':
 	now = datetime.datetime.now()
 	limitmem_res = open("./memory-profiling/cgroup-log/memusage.txt_" + now.isoformat(), 'w')
 
-	tasks = ["acl-fw-ipsec", "dpi-ipsec", "lpm-ipsec", "maglev-ipsec", "monitoring-ipsec", "nat-tcp-v4-ipsec"]
-	pktgen_types = map(lambda x: "chunck%d_ipsec.dat" % (x,), range(264))
+	tasks = ["acl-fw-ipsec", "dpi-ipsec", "lpm-ipsec", "maglev-ipsec", "nat-tcp-v4-ipsec"]
+	pktgen_types = ["ICTF_IPSEC", "CAIDA64_IPSEC", "CAIDA256_IPSEC", "CAIDA512_IPSEC", "CAIDA1024_IPSEC"]
 	
+	tasks_mon = ["monitoring-ipsec"]
+	pktgen_types_mon = map(lambda x: "chunck%d_ipsec.dat" % (x,), range(1))
+	
+	for task in tasks_mon:
+		for pktgen_type in pktgen_types_mon:
+
+			res = run_limitmem(task, pktgen_type, 4 * 1024 * 1024)
+
+			if res == -1:
+				print "retesting fails"
+			else:
+				print "retesting succeeds"
+
+			total_mem_usages = map(lambda x: x / (1024 * 1024.0), mem_usages)
+			max_total_mem_usages = max_mem_usage  / (1024 * 1024.0)		
+			
+			print total_mem_usages
+			print colored("[Cgroup direct]: peak_total_mem_usage: " + str(max_total_mem_usages), 'green')
+
+			limitmem_res.write(task + "," + pktgen_type + "\n")
+			limitmem_res.write(str(total_mem_usages) + "\n")
+			limitmem_res.write(str(max_total_mem_usages) + "\n")
+			limitmem_res.flush()
+	
+
 	for task in tasks:
 		for pktgen_type in pktgen_types:
 			# low_mem = 1 #KB

@@ -98,9 +98,12 @@ def get_draw_data_for_utli():
 # def
 
 if __name__ == '__main__':
-    load("../memory-profiling/cgroup-log/memusage.txt_2019-07-31T17:55:00.036708")
+    load("../memory-profiling/cgroup-log/memusage.txt_2019-08-02T08:06:40.973646")
+    load("../memory-profiling/cgroup-log/memusage.txt_2019-08-02T08:52:03.288853")
 
     process_draw_data()
+
+    file_out = open("./result_table.txt", "w")
 
     N = len(all_tasks)
     ind = np.arange(N) * 10 + 10    # the x locations for the groups
@@ -111,6 +114,8 @@ if __name__ == '__main__':
     yerr[0, :] = np.array(t_vec_med) - np.array(t_vec_min)
     yerr[1, :] = np.array(t_vec_max) - np.array(t_vec_med)
     p1 = plt.bar(ind, t_vec_med, width, yerr=yerr, color=colors[0], edgecolor = 'k', ecolor='k', align="center")
+    file_out.write(str(all_tasks).strip("[").rstrip("]") + "\n")
+    file_out.write(str(t_vec_med).strip("[").rstrip("]") + "\n")
 
     plt.legend([p1], ["Maximum memory usage (MB)"])
     plt.ylabel("Maximum memory usage (MB)")
@@ -124,9 +129,12 @@ if __name__ == '__main__':
     yerr[0, :] = np.array(t_vec_med) - np.array(t_vec_min)
     yerr[1, :] = np.array(t_vec_max) - np.array(t_vec_med)
     p1 = plt.bar(ind, t_vec_med, width, yerr=yerr, color=colors[0], edgecolor = 'k', ecolor='k', align="center")
+    file_out.write(str(t_vec_med).strip("[").rstrip("]") + "\n")
 
     plt.legend([p1], ["Memory wasting ratio"])
     plt.ylabel("Memory wasting ratio")
     plt.xticks(ind, all_tasks)
     plt.savefig('../figures/memratio.pdf')
     plt.clf()
+
+    file_out.close()

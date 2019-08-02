@@ -151,30 +151,31 @@ if __name__ == '__main__':
 	tasks_mon = ["monitoring-ipsec"]
 	pktgen_types_mon = map(lambda x: "chunck%d_ipsec.dat" % (x,), range(12))
 	
-	for task in tasks_mon:
-		for pktgen_type in pktgen_types_mon:
+	# for task in tasks_mon:
+	# 	for pktgen_type in pktgen_types_mon:
 
-			res = run_limitmem(task, pktgen_type, 4 * 1024 * 1024)
+	# 		res = run_limitmem(task, pktgen_type, 4 * 1024 * 1024)
 
-			if res == -1:
-				print "retesting fails"
-			else:
-				print "retesting succeeds"
+	# 		if res == -1:
+	# 			print "retesting fails"
+	# 		else:
+	# 			print "retesting succeeds"
 
-			total_mem_usages = map(lambda x: x / (1024 * 1024.0), mem_usages)
-			max_total_mem_usages = max_mem_usage  / (1024 * 1024.0)		
+	# 		total_mem_usages = map(lambda x: x / (1024 * 1024.0), mem_usages)
+	# 		max_total_mem_usages = max_mem_usage  / (1024 * 1024.0)		
 			
-			print total_mem_usages
-			print colored("[Cgroup direct]: peak_total_mem_usage: " + str(max_total_mem_usages), 'green')
+	# 		print total_mem_usages
+	# 		print colored("[Cgroup direct]: peak_total_mem_usage: " + str(max_total_mem_usages), 'green')
 
-			limitmem_res.write(task + "," + pktgen_type + "\n")
-			limitmem_res.write(str(total_mem_usages) + "\n")
-			limitmem_res.write(str(max_total_mem_usages) + "\n")
-			limitmem_res.flush()
+	# 		limitmem_res.write(task + "," + pktgen_type + "\n")
+	# 		limitmem_res.write(str(total_mem_usages) + "\n")
+	# 		limitmem_res.write(str(max_total_mem_usages) + "\n")
+	# 		limitmem_res.flush()
 	
 
 	for task in tasks:
 		for pktgen_type in pktgen_types:
+	
 			# low_mem = 1 #KB
 			# high_mem = 4 * 1024 * 1024 # KB
 			# min_mem = 4 #KB
@@ -189,6 +190,7 @@ if __name__ == '__main__':
 			# print low_mem, cur_mem_limit, high_mem
 			# print "using %lf to retest" % (high_mem)
 			# res = run_limitmem(task, pktgen_type, high_mem)
+
 
 			res = run_limitmem(task, pktgen_type, 4 * 1024 * 1024)
 

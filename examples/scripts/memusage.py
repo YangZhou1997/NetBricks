@@ -28,7 +28,7 @@ tasks = ["acl-fw-ipsec", "dpi-ipsec", "lpm-ipsec", "maglev-ipsec", "nat-tcp-v4-i
 pktgen_types = ["ICTF_IPSEC", "CAIDA64_IPSEC", "CAIDA256_IPSEC", "CAIDA512_IPSEC", "CAIDA1024_IPSEC"]
 
 tasks_mon = ["monitoring-ipsec"]
-pktgen_types_mon = map(lambda x: "chunck%d_ipsec.dat" % (x,), range(1))
+pktgen_types_mon = map(lambda x: "chunck%d_ipsec.dat" % (x,), range(12))
 
 num_queues = ["1", "2", "3", "4", "5", "6"]
 

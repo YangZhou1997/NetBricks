@@ -149,7 +149,7 @@ if __name__ == '__main__':
 	pktgen_types = ["ICTF_IPSEC", "CAIDA64_IPSEC", "CAIDA256_IPSEC", "CAIDA512_IPSEC", "CAIDA1024_IPSEC"]
 	
 	tasks_mon = ["monitoring-ipsec"]
-	pktgen_types_mon = map(lambda x: "chunck%d_ipsec.dat" % (x,), range(1))
+	pktgen_types_mon = map(lambda x: "chunck%d_ipsec.dat" % (x,), range(12))
 	
 	for task in tasks_mon:
 		for pktgen_type in pktgen_types_mon:

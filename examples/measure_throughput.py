@@ -60,12 +60,24 @@ def task_exec_reboot(task, pktgen_types, num_queue, repeat_num, throughput_res):
 				throughput_val = pktgen_results[start_index: end_index]
 				throughput_val = float(throughput_val)
 
-				print colored("throughput_val: %lf" % (throughput_val,), 'blue')
-				throughput_res.write(task + "," + pktgen_type + "," + str(num_queue) + "," + str(throughput_val) + "\n")
-				throughput_res.flush()
+				start_index = pktgen_results.find("avg_latency: ") + len("avg_latency: ") 
+				end_index = pktgen_results.find(", tail_latency: ", start_index)
+				avg_latency_val = pktgen_results[start_index: end_index]
+				avg_latency_val = float(avg_latency_val)
 
+				start_index = pktgen_results.find(", tail_latency: ") + len(", tail_latency: ") 
+				end_index = pktgen_results.find("\n", start_index)
+				tail_latency_val = pktgen_results[start_index: end_index]
+				tail_latency_val = float(tail_latency_val)
+
+				print colored("throughput_val: %lf, avg_latency_val: %lf, tail_latency_val: %lf" % (throughput_val, avg_latency_val, tail_latency_val), 'blue')
+				throughput_res.write(task + "," + pktgen_type + "," + str(num_queue) + "," + str(throughput_val) + "," + str(avg_latency_val) + "," + str(tail_latency_val) + "\n")
+				throughput_res.flush()
+				
 				os.system(CmdNetBricks['kill'].format(task=kill_keyword(task)))
 				time.sleep(5) # wait for the port being restored.
+
+				break
 
 	return 0
 
@@ -119,8 +131,19 @@ def task_exec(task, pktgen_types, num_queue, repeat_num, throughput_res):
 			throughput_val = pktgen_results[start_index: end_index]
 			throughput_val = float(throughput_val)
 
-			print colored("throughput_val: %lf" % (throughput_val,), 'blue')
-			throughput_res.write(task + "," + pktgen_type + "," + str(num_queue) + "," + str(throughput_val) + "\n")
+
+			start_index = pktgen_results.find("avg_latency: ") + len("avg_latency: ") 
+			end_index = pktgen_results.find(", tail_latency: ", start_index)
+			avg_latency_val = pktgen_results[start_index: end_index]
+			avg_latency_val = float(avg_latency_val)
+
+			start_index = pktgen_results.find(", tail_latency: ") + len(", tail_latency: ") 
+			end_index = pktgen_results.find("\n", start_index)
+			tail_latency_val = pktgen_results[start_index: end_index]
+			tail_latency_val = float(tail_latency_val)
+
+			print colored("throughput_val: %lf, avg_latency_val: %lf, tail_latency_val: %lf" % (throughput_val, avg_latency_val, tail_latency_val), 'blue')
+			throughput_res.write(task + "," + pktgen_type + "," + str(num_queue) + "," + str(throughput_val) + "," + str(avg_latency_val) + "," + str(tail_latency_val) + "\n")
 			throughput_res.flush()
 
 	os.system(CmdNetBricks['kill'].format(task=kill_keyword(task)))
@@ -139,6 +162,7 @@ num_queues = [1, 2, 3, 4, 5, 6]
 
 # ps -ef | grep release
 # sudo kill -9 ####
+TIMES = 1
 
 if __name__ == '__main__':
 	now = datetime.datetime.now()
@@ -151,7 +175,7 @@ if __name__ == '__main__':
 	for task in tasks_nonreboot:
 		for num_queue in num_queues:
 			run_count += 1
-			status = task_exec(task, pktgens, num_queue, 10, throughput_res)
+			status = task_exec(task, pktgens, num_queue, TIMES, throughput_res)
 			if status == -1:
 				fail_count += 1
 				fail_cases.append(task + " " + num_queue)
@@ -159,7 +183,7 @@ if __name__ == '__main__':
 	for task in tasks_reboot:
 		for num_queue in num_queues:
 			run_count += 1
-			status = task_exec_reboot(task, pktgens, num_queue, 10, throughput_res)
+			status = task_exec_reboot(task, pktgens, num_queue, TIMES, throughput_res)
 			if status == -1:
 				fail_count += 1
 				fail_cases.append(task + " " + num_queue)
@@ -167,7 +191,7 @@ if __name__ == '__main__':
 	for task in tasks_ipsec_nonreboot:
 		for num_queue in num_queues:
 			run_count += 1
-			status = task_exec(task, pktgens_ipsec, num_queue, 10, throughput_res)
+			status = task_exec(task, pktgens_ipsec, num_queue, TIMES, throughput_res)
 			if status == -1:
 				fail_count += 1
 				fail_cases.append(task + " " + num_queue)
@@ -175,7 +199,7 @@ if __name__ == '__main__':
 	for task in tasks_ipsec_reboot:
 		for num_queue in num_queues:
 			run_count += 1
-			status = task_exec_reboot(task, pktgens_ipsec, num_queue, 10, throughput_res)
+			status = task_exec_reboot(task, pktgens_ipsec, num_queue, TIMES, throughput_res)
 			if status == -1:
 				fail_count += 1
 				fail_cases.append(task + " " + num_queue)

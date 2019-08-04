@@ -93,7 +93,7 @@ if __name__ == '__main__':
             yerr = np.zeros((2, len(t_vec_min)))
             yerr[0, :] = np.array(t_vec_med) - np.array(t_vec_min)
             yerr[1, :] = np.array(t_vec_max) - np.array(t_vec_med)
-            p1 = plt.bar(ind + width * (cnt - len(num_queues) / 2 + 0.5), t_vec_med, width, yerr=yerr, color=colors[cnt], edgecolor = 'k', ecolor='k', align="center")
+            p1 = plt.bar(ind + width * (cnt * 1.0 - len(num_queues) / 2.0 + 0.5), t_vec_med, width, yerr=yerr, color=colors[cnt], edgecolor = 'k', ecolor='k', align="center")
             legends.append(p1)
             cnt += 1
 
@@ -112,7 +112,7 @@ if __name__ == '__main__':
             yerr = np.zeros((2, len(t_vec_min)))
             yerr[0, :] = np.array(t_vec_med) - np.array(t_vec_min)
             yerr[1, :] = np.array(t_vec_max) - np.array(t_vec_med)
-            p1 = plt.bar(ind + width * (cnt - len(num_queues) / 2 + 0.5), t_vec_med, width, yerr=yerr, color=colors[cnt], edgecolor = 'k', ecolor='k', align="center")
+            p1 = plt.bar(ind + width * (cnt * 1.0 - len(num_queues) / 2.0 + 0.5), t_vec_med, width, yerr=yerr, color=colors[cnt], edgecolor = 'k', ecolor='k', align="center")
             legends.append(p1)
             cnt += 1
 

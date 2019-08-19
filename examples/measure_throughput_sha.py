@@ -151,8 +151,9 @@ def task_exec(task, pktgen_types, num_queue, repeat_num, throughput_res):
 
 	return 0
 
-tasks_ipsec_nonreboot = ["dpi-ipsec-sha", "lpm-ipsec-sha", "maglev-ipsec-sha"]
-tasks_ipsec_reboot = ["acl-fw-ipsec-sha", "monitoring-ipsec-sha", "nat-tcp-v4-ipsec-sha"]
+tasks_ipsec_nonreboot = ["lpm-ipsec-sha", "maglev-ipsec-sha"]
+# tasks_ipsec_reboot = ["dpi-ipsec-sha", "acl-fw-ipsec-sha", "monitoring-ipsec-sha", "nat-tcp-v4-ipsec-sha"]
+tasks_ipsec_reboot = ["dpi-ipsec-sha", "monitoring-ipsec-sha", "nat-tcp-v4-ipsec-sha"]
 pktgens_ipsec = ["ICTF_IPSEC_SHA", "CAIDA64_IPSEC_SHA", "CAIDA256_IPSEC_SHA", "CAIDA512_IPSEC_SHA", "CAIDA1024_IPSEC_SHA"]
 pktgens_ipsec_acl = ["ICTF_IPSEC_ACL_SHA", "CAIDA64_IPSEC_ACL_SHA", "CAIDA256_IPSEC_ACL_SHA", "CAIDA512_IPSEC_ACL_SHA", "CAIDA1024_IPSEC_ACL_SHA"]
 
@@ -160,7 +161,7 @@ num_queues = [1, 2, 4, 8, 16]
 
 # ps -ef | grep release
 # sudo kill -9 ####
-TIMES = 1
+TIMES = 10
 
 if __name__ == '__main__':
 	now = datetime.datetime.now()

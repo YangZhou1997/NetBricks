@@ -1,4 +1,4 @@
 # !/bin/bash
 
-sleep 2h
 python measure_throughput.py
+python measure_throughput_sha.py

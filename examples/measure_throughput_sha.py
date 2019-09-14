@@ -9,8 +9,8 @@ CmdNetBricks = {
 }
 
 CmdPktgen = {
-	'start': 'ssh -i /home/yangz/.ssh/id_rsa yangz@10.243.38.87 "cd ./pktgen/dpdk_zeroloss_dyn/ && bash run_netbricks.sh ../l2.conf 0.1 32 60 1 {type}"',
-	'kill': 'sudo pkill "ssh yangz@10.243.38.87" 2>/dev/null'
+	'start': 'ssh -i /home/yangz/.ssh/id_rsa yangz@10.243.38.93 "cd ./pktgen/dpdk_zeroloss_dyn/ && bash run_netbricks.sh ../l2.conf 0.1 32 60 1 {type}"',
+	'kill': 'sudo pkill "ssh yangz@10.243.38.93" 2>/dev/null'
 }
 
 start_string = 'pkt sent, '
@@ -151,13 +151,15 @@ def task_exec(task, pktgen_types, num_queue, repeat_num, throughput_res):
 
 	return 0
 
-tasks_ipsec_nonreboot = ["lpm-ipsec-sha", "maglev-ipsec-sha"]
+# tasks_ipsec_nonreboot = ["lpm-ipsec-sha", "maglev-ipsec-sha"]
+tasks_ipsec_nonreboot = []
 # tasks_ipsec_reboot = ["dpi-ipsec-sha", "acl-fw-ipsec-sha", "monitoring-ipsec-sha", "nat-tcp-v4-ipsec-sha"]
-tasks_ipsec_reboot = ["dpi-ipsec-sha", "monitoring-ipsec-sha", "nat-tcp-v4-ipsec-sha"]
+tasks_ipsec_reboot = ["acl-fw-ipsec-sha"]
 pktgens_ipsec = ["ICTF_IPSEC_SHA", "CAIDA64_IPSEC_SHA", "CAIDA256_IPSEC_SHA", "CAIDA512_IPSEC_SHA", "CAIDA1024_IPSEC_SHA"]
 pktgens_ipsec_acl = ["ICTF_IPSEC_ACL_SHA", "CAIDA64_IPSEC_ACL_SHA", "CAIDA256_IPSEC_ACL_SHA", "CAIDA512_IPSEC_ACL_SHA", "CAIDA1024_IPSEC_ACL_SHA"]
 
-num_queues = [1, 2, 4, 8, 16]
+# num_queues = [1, 2, 4]
+num_queues = [1]
 
 # ps -ef | grep release
 # sudo kill -9 ####

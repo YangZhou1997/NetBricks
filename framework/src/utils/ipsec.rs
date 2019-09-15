@@ -70,6 +70,7 @@ pub fn my_decrypt_cbc(
     let mut out = vec![0; data.len() + 16];
     OPENSSL_SHA_DEC.with(|c_t| {
         let mut c = c_t.borrow_mut();
+        c.reset(Mode::Decrypt, AES_KEY, Some(AES_IV))?;
         let count = c.update(data, &mut out)?;
         let rest = c.finalize(&mut out[count..])?;
         out.truncate(count + rest);
@@ -84,6 +85,7 @@ pub fn my_encrypt_cbc(
     let mut out = vec![0; data.len() + 16];
     OPENSSL_SHA_ENC.with(|c_t| {
         let mut c = c_t.borrow_mut();
+        c.reset(Mode::Encrypt, AES_KEY, Some(AES_IV))?;
         let count = c.update(data, &mut out)?;
         let rest = c.finalize(&mut out[count..])?;
         out.truncate(count + rest);
@@ -227,15 +229,30 @@ pub fn my_decrypt_gcm(
 ) -> Result<Vec<u8>, ErrorStack> {
     let mut out = vec![0; data.len() + 16];
     OPENSSL_GCM_DEC.with(|c_t| {
+        // let start = Instant::now();
+
         let mut c = c_t.borrow_mut();
+        // let cipher = Cipher::aes_128_gcm();
+        // let mut c = Crypter::new(cipher, Mode::Decrypt, AES_KEY, Some(AES_IV)).unwrap();
+        c.reset(Mode::Decrypt, AES_KEY, Some(AES_IV))?;
+        
+        // let duration = start.elapsed();
+        // println!("DEC: {:?}", duration);
+           
         c.aad_update(aad)?;
         let count = c.update(data, &mut out)?;
         c.set_tag(tag)?;
         let rest = c.finalize(&mut out[count..])?;
         out.truncate(count + rest);
+
+        // let duration = start.elapsed();
+        // println!("DEC: {:?}", duration);
+
         Ok(out)
     })
 }
+use std::thread;
+use std::time::{Duration, Instant};
 
 #[inline]
 pub fn my_encrypt_gcm(
@@ -245,10 +262,16 @@ pub fn my_encrypt_gcm(
 ) -> Result<Vec<u8>, ErrorStack> {
     let mut out = vec![0; data.len() + 16];
     OPENSSL_GCM_ENC.with(|c_t| {
+        let start = Instant::now();
+
         let mut c = c_t.borrow_mut();
         // let cipher = Cipher::aes_128_gcm();
         // let mut c = Crypter::new(cipher, Mode::Encrypt, AES_KEY, Some(AES_IV)).unwrap();
+        c.reset(Mode::Encrypt, AES_KEY, Some(AES_IV))?;
         
+        // let duration = start.elapsed();
+        // println!("ENC: {:?}", duration);
+
         c.aad_update(aad)?;
         // println!("after aad_upate1");
 
@@ -256,6 +279,10 @@ pub fn my_encrypt_gcm(
         let rest = c.finalize(&mut out[count..])?;
         c.get_tag(tag)?;
         out.truncate(count + rest);
+
+        // let duration = start.elapsed();
+        // println!("ENC: {:?}", duration);
+
         Ok(out)
     })
 }
@@ -272,7 +299,7 @@ pub fn aes_gcm128_encrypt_openssl(pktptr: &[u8], esphdr: &[u8], output: &mut [u8
     if let Ok(ciphertext) = my_encrypt_gcm(&output[..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)], pktptr, hmac)
     {
         ciphertext_len = ciphertext.len();
-        println!("{}", ciphertext_len);
+        // println!("{}", ciphertext_len);
 
         output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen)..].copy_from_slice(hmac);
         output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ciphertext_len)].copy_from_slice(&ciphertext[..]);    
@@ -291,86 +318,12 @@ pub fn aes_gcm128_decrypt_openssl(pktptr: &[u8], output: &mut [u8], compdigest: 
         &pktptr[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(pktlen - ICV_LEN_GCM128)], &pktptr[(pktlen - ICV_LEN_GCM128)..])
     {
         let cleartext_len = cleartext.len();
-        println!("{}", cleartext_len);
+        // println!("{}", cleartext_len);
         output[..(cleartext_len)].copy_from_slice(&cleartext[..]);
     }
 
     Ok(pktlen - ICV_LEN_GCM128)
 }
-
-// thread_local! {
-//     pub static CIPHER_ENCRY: RefCell<CipherMbed> = {
-//         let mut cipher = CipherMbed::setup(
-//             raw::CipherId::Aes,
-//             raw::CipherMode::GCM,
-//             (AES_KEY.len() * 8) as u32,
-//         ).unwrap();
-//         cipher.set_key(Operation::Encrypt, AES_KEY).unwrap();
-//         cipher.set_iv(AES_IV).unwrap();
-//         RefCell::new(cipher)
-//     };
-// }
-
-
-// thread_local! {
-//     pub static CIPHER_DECRY: RefCell<CipherMbed> = {
-//         let mut cipher = CipherMbed::setup(
-//             raw::CipherId::Aes,
-//             raw::CipherMode::GCM,
-//             (AES_KEY.len() * 8) as u32,
-//         ).unwrap();
-//         cipher.set_key(Operation::Decrypt, AES_KEY).unwrap();
-//         cipher.set_iv(AES_IV).unwrap();
-//         RefCell::new(cipher)
-//     };
-// }
-
-
-// pub fn aes_gcm128_encrypt_mbedtls(pktptr: &[u8], esphdr: &[u8], output: &mut [u8]) -> Result<usize, CryptoError>
-// {
-//     let pktlen = pktptr.len();
-//     // if pktlen >(MAX_PKT_SIZE - ESP_HEADER_LENGTH - AES_GCM_IV_LENGTH - ICV_LEN_GCM128) as usize
-//     // {
-//     //     println!("Packet is too big to handle");
-//     //     stdout().flush().unwrap();
-//     //     return Err(CryptoError::PktlenError);
-//     // }
-//     let hmac: &mut [u8] = &mut [0u8; 16];
-//     let aad: &mut [u8] = &mut [0u8; (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)];
-//     aad[..ESP_HEADER_LENGTH].copy_from_slice(esphdr);
-//     aad[ESP_HEADER_LENGTH..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)].copy_from_slice(AES_IV);
-    
-//     CIPHER_ENCRY.with(|cipher| {
-//         let mut cipher_lived = cipher.borrow_mut();
-//         cipher_lived.encrypt_auth(aad, pktptr, 
-//             &mut output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen)], hmac).unwrap();
-//     });
-    
-//     output[..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)].copy_from_slice(aad);
-//     output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen)..].copy_from_slice(hmac);
-    
-//     Ok(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen + ICV_LEN_GCM128)
-// }
-
-// pub fn aes_gcm128_decrypt_mbedtls(pktptr: &[u8], output: &mut [u8], compdigest: bool) -> Result<usize, CryptoError>
-// {
-//     let pktlen = pktptr.len();    
-//     // if pktlen < (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ICV_LEN_GCM128) {
-//     //     println!("Decrypt: Packet length is not proper");
-//     //     stdout().flush().unwrap();
-//     //     return Err(CryptoError::PktlenError);
-//     // }
-//     CIPHER_DECRY.with(|cipher| {
-//         let mut cipher = cipher.borrow_mut();
-//         if let Ok(_plain_text) = cipher.decrypt_auth(&pktptr[0..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)], &pktptr[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(pktlen - ICV_LEN_GCM128)],
-//             &mut output[..(pktlen - (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ICV_LEN_GCM128))], &pktptr[(pktlen - ICV_LEN_GCM128)..])
-//         {
-//             let cleartext_len = pktlen - ESP_HEADER_LENGTH - AES_GCM_IV_LENGTH - ICV_LEN_GCM128;
-//             return Ok(cleartext_len + ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH);
-//         }
-//         return Ok(pktlen - ICV_LEN_GCM128);  
-//     })
-// }
 
 
 #[inline]

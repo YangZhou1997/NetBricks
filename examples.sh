@@ -24,17 +24,17 @@ export examples=(
         #examples/dpi
         #examples/monitoring
         examples/macswap-ipsec
-        #examples/acl-fw-ipsec
-        #examples/lpm-ipsec
-        #examples/nat-tcp-v4-ipsec
-        #examples/maglev-ipsec
-        #examples/dpi-ipsec
-        #examples/monitoring-ipsec
-        #examples/macswap-ipsec-sha
-        #examples/acl-fw-ipsec-sha
-        #examples/lpm-ipsec-sha
-        #examples/nat-tcp-v4-ipsec-sha
-        #examples/maglev-ipsec-sha
-        #examples/dpi-ipsec-sha
-        #examples/monitoring-ipsec-sha
+        examples/acl-fw-ipsec
+        examples/lpm-ipsec
+        examples/nat-tcp-v4-ipsec
+        examples/maglev-ipsec
+        examples/dpi-ipsec
+        examples/monitoring-ipsec
+        examples/macswap-ipsec-sha
+        examples/acl-fw-ipsec-sha
+        examples/lpm-ipsec-sha
+        examples/nat-tcp-v4-ipsec-sha
+        examples/maglev-ipsec-sha
+        examples/dpi-ipsec-sha
+        examples/monitoring-ipsec-sha
 )

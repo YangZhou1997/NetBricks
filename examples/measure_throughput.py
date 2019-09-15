@@ -153,13 +153,18 @@ def task_exec(task, pktgen_types, num_queue, repeat_num, throughput_res):
 
 tasks_nonreboot = ["lpm", "maglev"]
 tasks_reboot = ["acl-fw", "dpi", "monitoring", "nat-tcp-v4"]
-pktgens = ["ICTF", "CAIDA64", "CAIDA256", "CAIDA512", "CAIDA1024"]
-pktgens_acl = ["ICTF_ACL", "CAIDA64_ACL", "CAIDA256_ACL", "CAIDA512_ACL", "CAIDA1024_ACL"]
+# pktgens = ["ICTF", "CAIDA64", "CAIDA256", "CAIDA512", "CAIDA1024"]
+# pktgens_acl = ["ICTF_ACL", "CAIDA64_ACL", "CAIDA256_ACL", "CAIDA512_ACL", "CAIDA1024_ACL"]
+pktgens = ["ICTF", "CAIDA64"]
+pktgens_acl = ["ICTF_ACL", "CAIDA64_ACL"]
 
 tasks_ipsec_nonreboot = ["lpm-ipsec", "maglev-ipsec"]
 tasks_ipsec_reboot = ["acl-fw-ipsec", "dpi-ipsec", "monitoring-ipsec", "nat-tcp-v4-ipsec"]
-pktgens_ipsec = ["ICTF_IPSEC", "CAIDA64_IPSEC", "CAIDA256_IPSEC", "CAIDA512_IPSEC", "CAIDA1024_IPSEC"]
-pktgens_ipsec_acl = ["ICTF_IPSEC_ACL", "CAIDA64_IPSEC_ACL", "CAIDA256_IPSEC_ACL", "CAIDA512_IPSEC_ACL", "CAIDA1024_IPSEC_ACL"]
+# pktgens_ipsec = ["ICTF_IPSEC", "CAIDA64_IPSEC", "CAIDA256_IPSEC", "CAIDA512_IPSEC", "CAIDA1024_IPSEC"]
+# pktgens_ipsec_acl = ["ICTF_IPSEC_ACL", "CAIDA64_IPSEC_ACL", "CAIDA256_IPSEC_ACL", "CAIDA512_IPSEC_ACL", "CAIDA1024_IPSEC_ACL"]
+pktgens_ipsec = ["ICTF_IPSEC", "CAIDA64_IPSEC"]
+pktgens_ipsec_acl = ["ICTF_IPSEC_ACL", "CAIDA64_IPSEC_ACL"]
+
 
 # num_queues = [1, 2, 4, 8, 16]
 # num_queues = [1, 2, 4]

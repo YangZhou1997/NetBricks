@@ -46,7 +46,7 @@ extern crate twox_hash;
 extern crate proptest;
 
 extern crate openssl;
-extern crate mbedtls;
+// extern crate mbedtls;
 
 
 // need these first so other modules in netbricks can use the macros

@@ -1,14 +1,14 @@
 use openssl::symm::*;
 use openssl::hash::MessageDigest;
 use openssl::memcmp;
-use openssl::pkey::PKey;
+use openssl::pkey::{PKey, Private};
 use openssl::sign::Signer;
 use openssl::error::ErrorStack;
 
 // use mbedtls::cipher::{Cipher as CipherMbed, Encryption, Decryption, Authenticated, Fresh, AdditionalData};
-use mbedtls::cipher::raw::Cipher as CipherMbed;
-use mbedtls::cipher::raw;
-use mbedtls::cipher::raw::Operation;
+// use mbedtls::cipher::raw::Cipher as CipherMbed;
+// use mbedtls::cipher::raw;
+// use mbedtls::cipher::raw::Operation;
 
 use std::io::stdout;
 use std::io::Write;
@@ -45,43 +45,81 @@ pub const ICV_LEN_SHA256: usize = 16;
 pub const AES_GCM_IV_LENGTH: usize = 16;
 pub const ICV_LEN_GCM128: usize = 16;
 
-#[inline]
-fn my_cipher(
-    t: Cipher,
-    mode: Mode,
-    key: &[u8],
-    iv: Option<&[u8]>,
-    data: &[u8],
-) -> Result<Vec<u8>, ErrorStack> {
-    let mut c = Crypter::new(t, mode, key, iv)?;
-    c.pad(false);
-    let mut out = vec![0; data.len() + t.block_size()];
-    let count = c.update(data, &mut out)?;
-    let rest = c.finalize(&mut out[count..])?;
-    out.truncate(count + rest);
-    Ok(out)
+thread_local! {
+    pub static OPENSSL_SHA_DEC: RefCell<Crypter> = {
+        let cipher = Cipher::aes_128_cbc();
+        let mut c = Crypter::new(cipher, Mode::Decrypt, AES_KEY, Some(AES_IV)).unwrap();
+        c.pad(false);
+        RefCell::new(c)
+    };
 }
 
-
-#[inline]
-pub fn my_decrypt(
-    t: Cipher,
-    key: &[u8],
-    iv: Option<&[u8]>,
-    data: &[u8],
-) -> Result<Vec<u8>, ErrorStack> {
-    my_cipher(t, Mode::Decrypt, key, iv, data)
+thread_local! {
+    pub static OPENSSL_SHA_ENC: RefCell<Crypter> = {
+        let cipher = Cipher::aes_128_cbc();
+        let mut c = Crypter::new(cipher, Mode::Encrypt, AES_KEY, Some(AES_IV)).unwrap();
+        c.pad(false);
+        RefCell::new(c)
+    };
 }
 
 #[inline]
-pub fn my_encrypt(
-    t: Cipher,
-    key: &[u8],
-    iv: Option<&[u8]>,
+pub fn my_decrypt_cbc(
     data: &[u8],
 ) -> Result<Vec<u8>, ErrorStack> {
-    my_cipher(t, Mode::Encrypt, key, iv, data)
+    let mut out = vec![0; data.len() + 16];
+    OPENSSL_SHA_DEC.with(|c_t| {
+        let mut c = c_t.borrow_mut();
+        let count = c.update(data, &mut out)?;
+        let rest = c.finalize(&mut out[count..])?;
+        out.truncate(count + rest);
+        Ok(out)
+    })
 }
+
+#[inline]
+pub fn my_encrypt_cbc(
+    data: &[u8],
+) -> Result<Vec<u8>, ErrorStack> {
+    let mut out = vec![0; data.len() + 16];
+    OPENSSL_SHA_ENC.with(|c_t| {
+        let mut c = c_t.borrow_mut();
+        let count = c.update(data, &mut out)?;
+        let rest = c.finalize(&mut out[count..])?;
+        out.truncate(count + rest);
+        Ok(out)
+    })
+}
+
+
+// thread_local! {
+//     pub static SHA_SIGNER_KEY: RefCell<PKey<Private>> = {
+//         let key = PKey::hmac(SHA_KEY).unwrap();
+//         RefCell::new(key)
+//     };
+// }
+
+// thread_local! {
+//     pub static SHA_SIGNER: RefCell<Signer<'static>> = {
+//         SHA_SIGNER_KEY.with(|c_t| {
+//             let c = c_t.borrow();
+//             let mut signer = Signer::new(MessageDigest::sha256(), &c).unwrap();
+//             RefCell::new(signer)
+//         })
+//     };
+// }
+
+// #[inline]
+// pub fn my_sha_sign(
+//     data: &[u8],
+// ) -> Result<Vec<u8>, ErrorStack> {
+//     SHA_SIGNER.with(|signer_t| {
+//         let mut signer = signer_t.borrow_mut();
+//         signer.update(data).unwrap();
+//         let hmac = signer.sign_to_vec().unwrap();
+//         Ok(hmac)
+//     })   
+// }
 
 // pktptr points to the start of the cleartext ip header.
 // after output, output points to the start of the ESP header
@@ -103,8 +141,7 @@ pub fn aes_cbc_sha256_encrypt_openssl(pktptr: &[u8], esphdr: &[u8], output: &mut
     output[..ESP_HEADER_LENGTH].copy_from_slice(esphdr);
     output[ESP_HEADER_LENGTH..(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH)].copy_from_slice(AES_IV);
 
-    let cipher = Cipher::aes_128_cbc();
-    let ciphertext = my_encrypt(cipher, AES_KEY, Some(AES_IV), pktptr).unwrap();
+    let ciphertext = my_encrypt_cbc(pktptr).unwrap();
     let ciphertext_len = ciphertext.len();
     output[(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH)..(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH + ciphertext_len)].copy_from_slice(&ciphertext[..]);
     if ciphertext_len != pktlen
@@ -114,11 +151,11 @@ pub fn aes_cbc_sha256_encrypt_openssl(pktptr: &[u8], esphdr: &[u8], output: &mut
         stdout().flush().unwrap();
         return Err(CryptoError::AESEncryptError);
     }
-
     let key = PKey::hmac(SHA_KEY).unwrap();
     let mut signer = Signer::new(MessageDigest::sha256(), &key).unwrap();
     signer.update(&output[..(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH + ciphertext_len)]).unwrap();
     let hmac = signer.sign_to_vec().unwrap();
+    // let hmac = my_sha_sign(&output[..(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH + ciphertext_len)]).unwrap();
     output[(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH + ciphertext_len)..(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH + ciphertext_len + ICV_LEN_SHA256)].copy_from_slice(&hmac[..ICV_LEN_SHA256]);
     
     Ok(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH + ciphertext_len + ICV_LEN_SHA256)
@@ -139,6 +176,7 @@ pub fn aes_cbc_sha256_decrypt_openssl(pktptr: &[u8], output: &mut [u8], compdige
     let mut signer = Signer::new(MessageDigest::sha256(), &key).unwrap();
     signer.update(&pktptr[..(pktlen - ICV_LEN_SHA256)]).unwrap();
     let hmac = signer.sign_to_vec().unwrap();
+    // let hmac = my_sha_sign(&pktptr[..(pktlen - ICV_LEN_SHA256)]).unwrap();
     if compdigest
     {
         if !memcmp::eq(&hmac[..ICV_LEN_SHA256], &pktptr[(pktlen - ICV_LEN_SHA256)..])
@@ -148,10 +186,8 @@ pub fn aes_cbc_sha256_decrypt_openssl(pktptr: &[u8], output: &mut [u8], compdige
             return Err(CryptoError::HmacMismatch);
         }
     }
-
-    let cipher = Cipher::aes_128_cbc();
-    // let cleartext = decrypt(cipher, AES_KEY, Some(AES_IV), &pktptr[(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH)..(pktlen - ICV_LEN_SHA256)]).unwrap();
-    let cleartext = my_decrypt(cipher, AES_KEY, Some(AES_IV), &pktptr[(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH)..(pktlen - ICV_LEN_SHA256)]).unwrap();
+    // let cipher = Cipher::aes_128_cbc();
+    let cleartext = my_decrypt_cbc(&pktptr[(ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH)..(pktlen - ICV_LEN_SHA256)]).unwrap();
     
     let cleartext_len = cleartext.len();
     if cleartext_len != pktlen - ESP_HEADER_LENGTH - AES_CBC_IV_LENGTH - ICV_LEN_SHA256
@@ -166,6 +202,65 @@ pub fn aes_cbc_sha256_decrypt_openssl(pktptr: &[u8], output: &mut [u8], compdige
     Ok(cleartext_len + ESP_HEADER_LENGTH + AES_CBC_IV_LENGTH)
 }
 
+
+thread_local! {
+    pub static OPENSSL_GCM_DEC: RefCell<Crypter> = {
+        let cipher = Cipher::aes_128_gcm();
+        let mut c = Crypter::new(cipher, Mode::Decrypt, AES_KEY, Some(AES_IV)).unwrap();
+        RefCell::new(c)
+    };
+}
+
+thread_local! {
+    pub static OPENSSL_GCM_ENC: RefCell<Crypter> = {
+        let cipher = Cipher::aes_128_gcm();
+        let mut c = Crypter::new(cipher, Mode::Encrypt, AES_KEY, Some(AES_IV)).unwrap();
+        RefCell::new(c)
+    };
+}
+
+#[inline]
+pub fn my_decrypt_gcm(
+    aad: &[u8],
+    data: &[u8],
+    tag: &[u8]
+) -> Result<Vec<u8>, ErrorStack> {
+    let mut out = vec![0; data.len() + 16];
+    OPENSSL_GCM_DEC.with(|c_t| {
+        let mut c = c_t.borrow_mut();
+        c.aad_update(aad)?;
+        let count = c.update(data, &mut out)?;
+        c.set_tag(tag)?;
+        let rest = c.finalize(&mut out[count..])?;
+        out.truncate(count + rest);
+        Ok(out)
+    })
+}
+
+#[inline]
+pub fn my_encrypt_gcm(
+    aad: &[u8],
+    data: &[u8],
+    tag: &mut [u8]
+) -> Result<Vec<u8>, ErrorStack> {
+    let mut out = vec![0; data.len() + 16];
+    OPENSSL_GCM_ENC.with(|c_t| {
+        let mut c = c_t.borrow_mut();
+        // let cipher = Cipher::aes_128_gcm();
+        // let mut c = Crypter::new(cipher, Mode::Encrypt, AES_KEY, Some(AES_IV)).unwrap();
+        
+        c.aad_update(aad)?;
+        // println!("after aad_upate1");
+
+        let count = c.update(data, &mut out)?;
+        let rest = c.finalize(&mut out[count..])?;
+        c.get_tag(tag)?;
+        out.truncate(count + rest);
+        Ok(out)
+    })
+}
+
+
 pub fn aes_gcm128_encrypt_openssl(pktptr: &[u8], esphdr: &[u8], output: &mut [u8]) -> Result<usize, CryptoError>
 {
     let pktlen = pktptr.len();
@@ -173,14 +268,16 @@ pub fn aes_gcm128_encrypt_openssl(pktptr: &[u8], esphdr: &[u8], output: &mut [u8
     output[ESP_HEADER_LENGTH..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)].copy_from_slice(AES_IV);
     let hmac: &mut [u8] = &mut [0u8; 16];
 
-    let cipher = Cipher::aes_128_gcm();
-    let ciphertext = encrypt_aead(cipher, AES_KEY, Some(AES_IV), &output[..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)], 
-        pktptr, hmac).unwrap();
-    let ciphertext_len = ciphertext.len();
+    let mut ciphertext_len = pktlen;
+    if let Ok(ciphertext) = my_encrypt_gcm(&output[..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)], pktptr, hmac)
+    {
+        ciphertext_len = ciphertext.len();
+        println!("{}", ciphertext_len);
 
-    output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen)..].copy_from_slice(hmac);
-    output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ciphertext_len)].copy_from_slice(&ciphertext[..]);
-
+        output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen)..].copy_from_slice(hmac);
+        output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ciphertext_len)].copy_from_slice(&ciphertext[..]);    
+    }
+    
     Ok(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ciphertext_len + ICV_LEN_GCM128)
 }
 
@@ -189,93 +286,91 @@ pub fn aes_gcm128_decrypt_openssl(pktptr: &[u8], output: &mut [u8], compdigest: 
 {
     let pktlen = pktptr.len();
     // let hmac: &mut [u8] = &mut [0u8; 16];
-    let cipher = Cipher::aes_128_gcm();
     
-    if let Ok(cleartext) = decrypt_aead(cipher, AES_KEY, Some(AES_IV), &pktptr[0..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)], 
+    if let Ok(cleartext) = my_decrypt_gcm(&pktptr[0..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)], 
         &pktptr[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(pktlen - ICV_LEN_GCM128)], &pktptr[(pktlen - ICV_LEN_GCM128)..])
     {
         let cleartext_len = cleartext.len();
+        println!("{}", cleartext_len);
         output[..(cleartext_len)].copy_from_slice(&cleartext[..]);
     }
 
     Ok(pktlen - ICV_LEN_GCM128)
 }
 
-thread_local! {
-    pub static CIPHER_ENCRY: RefCell<CipherMbed> = {
-        let mut cipher = CipherMbed::setup(
-            raw::CipherId::Aes,
-            raw::CipherMode::GCM,
-            (AES_KEY.len() * 8) as u32,
-        ).unwrap();
-        cipher.set_key(Operation::Encrypt, AES_KEY).unwrap();
-        cipher.set_iv(AES_IV).unwrap();
-        RefCell::new(cipher)
-    };
-}
+// thread_local! {
+//     pub static CIPHER_ENCRY: RefCell<CipherMbed> = {
+//         let mut cipher = CipherMbed::setup(
+//             raw::CipherId::Aes,
+//             raw::CipherMode::GCM,
+//             (AES_KEY.len() * 8) as u32,
+//         ).unwrap();
+//         cipher.set_key(Operation::Encrypt, AES_KEY).unwrap();
+//         cipher.set_iv(AES_IV).unwrap();
+//         RefCell::new(cipher)
+//     };
+// }
 
 
-thread_local! {
-    pub static CIPHER_DECRY: RefCell<CipherMbed> = {
-        let mut cipher = CipherMbed::setup(
-            raw::CipherId::Aes,
-            raw::CipherMode::GCM,
-            (AES_KEY.len() * 8) as u32,
-        ).unwrap();
-        cipher.set_key(Operation::Decrypt, AES_KEY).unwrap();
-        cipher.set_iv(AES_IV).unwrap();
-        RefCell::new(cipher)
-    };
-}
+// thread_local! {
+//     pub static CIPHER_DECRY: RefCell<CipherMbed> = {
+//         let mut cipher = CipherMbed::setup(
+//             raw::CipherId::Aes,
+//             raw::CipherMode::GCM,
+//             (AES_KEY.len() * 8) as u32,
+//         ).unwrap();
+//         cipher.set_key(Operation::Decrypt, AES_KEY).unwrap();
+//         cipher.set_iv(AES_IV).unwrap();
+//         RefCell::new(cipher)
+//     };
+// }
 
 
-pub fn aes_gcm128_encrypt_mbedtls(pktptr: &[u8], esphdr: &[u8], output: &mut [u8]) -> Result<usize, CryptoError>
-{
-    let pktlen = pktptr.len();
-    // if pktlen >(MAX_PKT_SIZE - ESP_HEADER_LENGTH - AES_GCM_IV_LENGTH - ICV_LEN_GCM128) as usize
-    // {
-    //     println!("Packet is too big to handle");
-    //     stdout().flush().unwrap();
-    //     return Err(CryptoError::PktlenError);
-    // }
-    let hmac: &mut [u8] = &mut [0u8; 16];
-    let aad: &mut [u8] = &mut [0u8; (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)];
-    aad[..ESP_HEADER_LENGTH].copy_from_slice(esphdr);
-    aad[ESP_HEADER_LENGTH..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)].copy_from_slice(AES_IV);
+// pub fn aes_gcm128_encrypt_mbedtls(pktptr: &[u8], esphdr: &[u8], output: &mut [u8]) -> Result<usize, CryptoError>
+// {
+//     let pktlen = pktptr.len();
+//     // if pktlen >(MAX_PKT_SIZE - ESP_HEADER_LENGTH - AES_GCM_IV_LENGTH - ICV_LEN_GCM128) as usize
+//     // {
+//     //     println!("Packet is too big to handle");
+//     //     stdout().flush().unwrap();
+//     //     return Err(CryptoError::PktlenError);
+//     // }
+//     let hmac: &mut [u8] = &mut [0u8; 16];
+//     let aad: &mut [u8] = &mut [0u8; (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)];
+//     aad[..ESP_HEADER_LENGTH].copy_from_slice(esphdr);
+//     aad[ESP_HEADER_LENGTH..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)].copy_from_slice(AES_IV);
     
-    CIPHER_ENCRY.with(|cipher| {
-        let mut cipher_lived = cipher.borrow_mut();
-        cipher_lived.encrypt_auth(aad, pktptr, 
-            &mut output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen)], hmac).unwrap();
-    });
+//     CIPHER_ENCRY.with(|cipher| {
+//         let mut cipher_lived = cipher.borrow_mut();
+//         cipher_lived.encrypt_auth(aad, pktptr, 
+//             &mut output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen)], hmac).unwrap();
+//     });
     
-    output[..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)].copy_from_slice(aad);
-    output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen)..].copy_from_slice(hmac);
+//     output[..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)].copy_from_slice(aad);
+//     output[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen)..].copy_from_slice(hmac);
     
-    Ok(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen + ICV_LEN_GCM128)
-}
+//     Ok(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + pktlen + ICV_LEN_GCM128)
+// }
 
-pub fn aes_gcm128_decrypt_mbedtls(pktptr: &[u8], output: &mut [u8], compdigest: bool) -> Result<usize, CryptoError>
-{
-    let pktlen = pktptr.len();    
-    // if pktlen < (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ICV_LEN_GCM128) {
-    //     println!("Decrypt: Packet length is not proper");
-    //     stdout().flush().unwrap();
-    //     return Err(CryptoError::PktlenError);
-    // }
-    CIPHER_DECRY.with(|cipher| {
-        let mut cipher = cipher.borrow_mut();
-        if let Ok(_plain_text) = cipher.decrypt_auth(&pktptr[0..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)], &pktptr[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(pktlen - ICV_LEN_GCM128)],
-            &mut output[..(pktlen - (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ICV_LEN_GCM128))], &pktptr[(pktlen - ICV_LEN_GCM128)..])
-        {
-            let cleartext_len = pktlen - ESP_HEADER_LENGTH - AES_GCM_IV_LENGTH - ICV_LEN_GCM128;
-            return Ok(cleartext_len + ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH);
-        }
-        return Ok(pktlen - ICV_LEN_GCM128);  
-    })
-}
-
-
+// pub fn aes_gcm128_decrypt_mbedtls(pktptr: &[u8], output: &mut [u8], compdigest: bool) -> Result<usize, CryptoError>
+// {
+//     let pktlen = pktptr.len();    
+//     // if pktlen < (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ICV_LEN_GCM128) {
+//     //     println!("Decrypt: Packet length is not proper");
+//     //     stdout().flush().unwrap();
+//     //     return Err(CryptoError::PktlenError);
+//     // }
+//     CIPHER_DECRY.with(|cipher| {
+//         let mut cipher = cipher.borrow_mut();
+//         if let Ok(_plain_text) = cipher.decrypt_auth(&pktptr[0..(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)], &pktptr[(ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH)..(pktlen - ICV_LEN_GCM128)],
+//             &mut output[..(pktlen - (ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH + ICV_LEN_GCM128))], &pktptr[(pktlen - ICV_LEN_GCM128)..])
+//         {
+//             let cleartext_len = pktlen - ESP_HEADER_LENGTH - AES_GCM_IV_LENGTH - ICV_LEN_GCM128;
+//             return Ok(cleartext_len + ESP_HEADER_LENGTH + AES_GCM_IV_LENGTH);
+//         }
+//         return Ok(pktlen - ICV_LEN_GCM128);  
+//     })
+// }
 
 
 #[inline]

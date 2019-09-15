@@ -2,39 +2,39 @@
 # Lists all the examples that are runnable and/or testable.
 # This is used by the build script.
 export examples=(
-        examples/echo-reply
-        examples/ipv4or6
-        examples/mtu-too-big
+        #examples/echo-reply
+        #examples/ipv4or6
+        #examples/mtu-too-big
         # examples/op-errors
         # examples/signals
         ### Runnable examples | No Tests associated
         ### =======================================
-        examples/ttl-chain
-        examples/collect-metrics
-        examples/embedded-scheduler
-        examples/embedded-scheduler-dependency
-        examples/sctp
+        #examples/ttl-chain
+        #examples/collect-metrics
+        #examples/embedded-scheduler
+        #examples/embedded-scheduler-dependency
+        #examples/sctp
         # examples/tcp-reconstruction
         ### NFs for experiments
-        examples/macswap
-        examples/acl-fw
-        examples/lpm
-        examples/nat-tcp-v4
-        examples/maglev
-        examples/dpi
-        examples/monitoring
+        #examples/macswap
+        #examples/acl-fw
+        #examples/lpm
+        #examples/nat-tcp-v4
+        #examples/maglev
+        #examples/dpi
+        #examples/monitoring
         examples/macswap-ipsec
-        examples/acl-fw-ipsec
-        examples/lpm-ipsec
-        examples/nat-tcp-v4-ipsec
-        examples/maglev-ipsec
-        examples/dpi-ipsec
-        examples/monitoring-ipsec
-        examples/macswap-ipsec-sha
-        examples/acl-fw-ipsec-sha
-        examples/lpm-ipsec-sha
-        examples/nat-tcp-v4-ipsec-sha
-        examples/maglev-ipsec-sha
-        examples/dpi-ipsec-sha
-        examples/monitoring-ipsec-sha
+        #examples/acl-fw-ipsec
+        #examples/lpm-ipsec
+        #examples/nat-tcp-v4-ipsec
+        #examples/maglev-ipsec
+        #examples/dpi-ipsec
+        #examples/monitoring-ipsec
+        #examples/macswap-ipsec-sha
+        #examples/acl-fw-ipsec-sha
+        #examples/lpm-ipsec-sha
+        #examples/nat-tcp-v4-ipsec-sha
+        #examples/maglev-ipsec-sha
+        #examples/dpi-ipsec-sha
+        #examples/monitoring-ipsec-sha
 )

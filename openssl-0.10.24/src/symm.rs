@@ -515,7 +515,9 @@ impl Crypter {
     /// `update`.
     pub fn aad_update(&mut self, input: &[u8]) -> Result<(), ErrorStack> {
         unsafe {
+            // println!("aad_upate1");
             assert!(input.len() <= c_int::max_value() as usize);
+            // println!("aad_upate2");
             let mut len = 0;
             cvt(ffi::EVP_CipherUpdate(
                 self.ctx,

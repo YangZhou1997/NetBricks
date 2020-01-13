@@ -13,13 +13,13 @@ members = [
     # "examples/signals",
     # "examples/tcp-reconstruction",
     # 
-    #"examples/macswap",
-    #"examples/acl-fw",
-    #"examples/lpm",
-    #"examples/maglev",
-    #"examples/dpi",
-    #"examples/nat-tcp-v4",
-    #"examples/monitoring",
+    "examples/macswap",
+    "examples/acl-fw",
+    "examples/lpm",
+    "examples/maglev",
+    "examples/dpi",
+    "examples/nat-tcp-v4",
+    "examples/monitoring",
     # 
     "examples/macswap-ipsec",
     "examples/acl-fw-ipsec",
@@ -36,6 +36,8 @@ members = [
     "examples/dpi-ipsec-sha",
     "examples/nat-tcp-v4-ipsec-sha",
     "examples/monitoring-ipsec-sha",
+    # 
+    "examples/dumptrace",
 ]
 
 [profile.release]

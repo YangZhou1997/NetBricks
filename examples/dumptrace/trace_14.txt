@@ -1,0 +1,15 @@
+ocal 352 JH #ictf ~wcsc]seli 10.13.126.250 irc-server.lrver.local [WoD]stas H :0 d049678
+:irc-server.local 352 JH #ictf ~gerber 10.13.151.4 irc-server.local [dotF]CG H :0 Gerber
+:irc-server.local 352 JH #ictf ~Adium 10.13.131.143 irc-server.local aeichner|enofl2 H :0 Adium-Benutzer
+:irc-server.local 352 JH #ictf ~merten 10.13.131.119 irc-server.local [ENOFLAG]merten H :0 merten
+:irc-server.local 352 JH #ictf ~Hulu 10.13.149.1 irc-server.local [SKS]hulu H :0 ...
+:irc-server.local 352 JH #ictf ~HDcman 10.13.148.210 irc-server.local [HD]cman H :0 [HD]cman
+:irc-server.local 352 JH #ictf ~chatzilla 10.13.131.194 irc-server.local AndyL H :0 New Now Know How
+:irc-server.local 352 JH #ictf ~lampes___ 10.13.132.1 irc-server.local hgb^lamp0s H :0 lampes____
+:irc-server.local 352 JH #ictf ~fs 10.13.151.4 irc-server.local [DotF]Rafa H :0 Florian Scheuer
+:irc-server.local 352 JH #ictf ~Adium 10.13.112.1 irc-server.local [W0Y]msz H :0 Adium User
+:irc-server.local 352 JH #ictf ~hellman 10.13.144.6 irc-server.local hellman H :0 Alexey Udovenko
+:irc-server.local 352 JH #ictf ~z3x 10.13.126.238 irc-server.local z3x H :0 z3x
+:irc-server.local 352 JH #ictf ~quassel 10.13.111.1 irc-server.local aurelien H :0 Aurelien,,,
+:irc-server.local 352 JH #ictf ~fdoelitz 10.13.149.1 irc-server.local [SKS]Peter H :0 meme
+:irc-server.local 352 JH #ictf ~

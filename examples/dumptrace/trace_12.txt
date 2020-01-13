@@ -1,0 +1,15 @@
+WoD]alech H :0 Alexander Klink
+:irc-server.local 352 JH #ictf ~atrox 10.13.112.1 irc-server.local atrox H :0 Adrian
+:irc-server.local 352 JH #ictf ~abose 10.13.143.1 irc-server.local abose H :0 abose
+:irc-server.local 352 JH #ictf ~chatzilla 10.13.126.244 irc-server.local [wcsc]kitsu H :0 New Now Know How
+:irc-server.local 352 JH #ictf ~student 10.13.101.1 irc-server.local Murx H :0 student
+:irc-server.local 352 JH #ictf ~chatzilla 10.13.153.1 irc-server.local is091035 H :0 New Now Know How
+:irc-server.local 352 JH #ictf ~Ryu 10.13.101.1 irc-server.local [flux]tmh H :0 Ryu
+:irc-server.local 352 JH #ictf ~meowcat 10.13.101.1 irc-server.local [flux]meow H :0 meowcat
+:irc-server.local 352 JH #ictf ~lollacci 10.13.123.12 irc-server.local [CM]loll H :0 purple
+:irc-server.local 352 JH #ictf ~christian 10.13.118.141 irc-server.local [USS]christian H :0 Christian
+:irc-server.local 352 JH #ictf ~denis 10.13.149.1 irc-server.local [SKS]DenX H :0 Denis
+:irc-server.local 352 JH #ictf ~cleric 10.13.158.0 irc-server.local [gn00bz]Cleric H :0 Unknown
+:irc-server.local 352 JH #ictf ~olivier 10.13.127.1 irc-server.local [groupies]plaxx H :0 Olivier Bilodeau
+:irc-server.local 352 JH #ictf ~mswiech 10.13.143.1 irc-server.local [LIST]dotpyfe H :0 mswiech
+:irc-server.local 352 JH #ictf ~nick.pupk 10.13.171.1 irc-server.local Nemanli H :0 Nem

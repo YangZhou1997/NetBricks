@@ -16,13 +16,13 @@ export examples=(
         #examples/sctp
         # examples/tcp-reconstruction
         ### NFs for experiments
-        #examples/macswap
-        #examples/acl-fw
-        #examples/lpm
-        #examples/nat-tcp-v4
-        #examples/maglev
-        #examples/dpi
-        #examples/monitoring
+        examples/macswap
+        examples/acl-fw
+        examples/lpm
+        examples/nat-tcp-v4
+        examples/maglev
+        examples/dpi
+        examples/monitoring
         examples/macswap-ipsec
         examples/acl-fw-ipsec
         examples/lpm-ipsec
@@ -37,4 +37,5 @@ export examples=(
         examples/maglev-ipsec-sha
         examples/dpi-ipsec-sha
         examples/monitoring-ipsec-sha
+        examples/dumptrace
 )

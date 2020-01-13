@@ -1,0 +1,15 @@
+c-server.local 352 JH #ictf ~georg 10.13.112.1 irc-server.local gm H :0 Georg Merzdovnik
+:irc-server.local 352 JH #ictf ~m 10.13.112.1 irc-server.local [w0y]mw H :0 m
+:irc-server.local 352 JH #ictf ~Thorsten 10.13.152.184 irc-server.local FAU_Thorsten H :0 Thorsten W.
+:irc-server.local 352 JH #ictf ~IceChat7 10.13.149.1 irc-server.local [SKS]Morpheus H :0 The Chat cool people use
+:irc-server.local 352 JH #ictf ~chatzilla 10.13.126.243 irc-server.local [wcsc]an_fear H :0 New Now Know How
+:irc-server.local 352 JH #ictf ~insel 10.13.113.1 irc-server.local insel H :0 insel
+:irc-server.local 352 JH #ictf ~martin 10.13.132.1 irc-server.local hgb^capi H :0 Martin C.
+:irc-server.local 352 JH #ictf ~ceotron 10.13.153.1 irc-server.local [FHSTP]c3otr0n H :0 .... .....
+:irc-server.local 352 JH #ictf ~dmi3sibea 10.13.137.1 irc-server.local dmi3[sibears] H :0 Unknown
+:irc-server.local 352 JH #ictf ~rul 10.13.103.105 irc-server.local [SyPeR]Rul H :0 Unknown
+:irc-server.local 352 JH #ictf ~chatzilla 10.13.153.1 irc-server.local [FHSTP]Rudi H :0 New Now Know How
+:irc-server.local 352 JH #ictf ~phil 10.13.118.143 irc-server.local phil H :0 purple
+:irc-server.local 352 JH #ictf ~dmorwood 10.13.124.246 irc-server.local dmorwood H :0 Unknown
+:irc-server.local 352 JH #ictf ~harry 10.13.132.1 irc-server.local hgb^harr1 H :0 harry
+:irc-server.l

@@ -1,0 +1,16 @@
+guza 10.13.112.1 irc-server.local guza H :0 guza
+:irc-server.local 352 JH #ictf ~jon 10.13.107.206 irc-server.local jon H :0 Jon C
+:irc-server.local 352 JH #ictf ~SanSS 10.13.103.106 irc-server.local [SyPER]San_SS H :0 --
+:irc-server.local 352 JH #ictf ~f0gd0g 10.13.104.6 irc-server.local [f0gd0gs]f0gd0g H :0 f0gd0g
+:irc-server.local 352 JH #ictf ~SKS]Ranco 10.13.149.1 irc-server.local [SKS]Rancor H :0 Rancor
+:irc-server.local 352 JH #ictf ~bluecore 10.13.149.1 irc-server.local [SKS]bluec0re H :0 purple
+:irc-server.local 352 JH #ictf ~liangcai 10.13.107.129 irc-server.local lc G :0 purple
+:irc-server.local 352 JH #ictf ~USS]Trace 10.13.118.139 irc-server.local [USS]Tracernet H :0 Unknown
+:irc-server.local 352 JH #ictf ~mullet 10.13.152.191 irc-server.local Mullet H :0 mullet
+:irc-server.local 352 JH #ictf ~ed 10.13.120.1 irc-server.local ed H :0 ed
+:irc-server.local 352 JH #ictf ~Adium 10.13.112.1 irc-server.local [W0Y]bgm H :0 Adium-Benutzer
+:irc-server.local 352 JH #ictf ~mzanetti 10.13.118.138 irc-server.local [USS]mzanetti H :0 Michael Zanetti
+:irc-server.local 352 JH #ictf ~janosch 10.13.105.188 irc-server.local [CI]Janosch H :0 ...
+:irc-server.local 352 JH #ictf ~bernhard 10.13.112.1 irc-server.local [w0y]bernhard H :0 bernhard
+:irc-server.local 352 JH #ictf ~jan 10.13.105.135 irc-server.local jan1 H :0 purple
+:ir

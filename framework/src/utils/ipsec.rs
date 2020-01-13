@@ -262,7 +262,7 @@ pub fn my_encrypt_gcm(
 ) -> Result<Vec<u8>, ErrorStack> {
     let mut out = vec![0; data.len() + 16];
     OPENSSL_GCM_ENC.with(|c_t| {
-        let start = Instant::now();
+        // let start = Instant::now();
 
         let mut c = c_t.borrow_mut();
         // let cipher = Cipher::aes_128_gcm();

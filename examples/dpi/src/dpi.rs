@@ -21,7 +21,7 @@ thread_local! {
     pub static AC: RefCell<AhoCorasick> = {
         let mut rules = vec![];
 
-        let file = File::open("./dpi/wordrules/word.rules").expect("cannot open file");
+        let file = File::open("./dpi/rules/word.rules").expect("cannot open file");
         let file = BufReader::new(file);
         for line in file.lines().filter_map(|result| result.ok()){
             // println!("{}", line);

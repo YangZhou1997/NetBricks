@@ -1,3 +1,5 @@
+#[macro_use]
+extern crate hyperscan;
 extern crate colored;
 extern crate fnv;
 #[macro_use]

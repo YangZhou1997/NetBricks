@@ -39,4 +39,5 @@ export examples=(
         examples/monitoring-ipsec-sha
         examples/dumptrace
         examples/hyperscan
+        examples/dpi-hs
 )

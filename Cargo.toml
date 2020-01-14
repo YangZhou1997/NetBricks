@@ -38,8 +38,10 @@ members = [
     "examples/monitoring-ipsec-sha",
     # 
     "examples/dumptrace",
-    "examples/hyperscan",    
+    "examples/hyperscan",
+    "examples/dpi-hs",
 ]
+exclude = ["hyperscan-0.1.8"]
 
 [profile.release]
 opt-level = 3

@@ -1,5 +1,5 @@
 [package]
-name = "dpi"
+name = "dpi-hs"
 version = "0.1.0"
 authors = ["Aurojit Panda <apanda@cs.berkeley.edu>", "William of Ockham <Occam_Engineering@comcast.com>", "Yang Zhou <yangzhou@g.harvard.edu"]
 description = "Example: dpi"
@@ -16,6 +16,7 @@ lazy_static = ">= 1.3"
 aho-corasick = "0.7"
 rand = "0.6"
 netbricks = { path = "../../framework" }
+hyperscan = { version = "0.1.8"}
 
 [features]
 default = []

@@ -11,7 +11,7 @@ use std::cell::RefCell;
 use std::io;
 use std::io::{BufRead, BufReader, Write};
 use hyperscan::*;
-use std::sync::atomic::{AtomicUsize, Ordering};
+// use std::sync::atomic::{AtomicUsize, Ordering};
 
 const RULE_NUM: usize = (1 << 30); 
 
@@ -42,7 +42,7 @@ pub struct HSC {
     /// Hyperscan temporary scratch space (used in both modes)
     pub scratch: RawScratch,
     // Count of matches found during scanning
-    pub match_count: AtomicUsize,
+    // pub match_count: AtomicUsize,
 }
 impl HSC {
     fn new(db_block: BlockDatabase) -> Result<HSC> {
@@ -50,12 +50,12 @@ impl HSC {
         Ok(HSC {
             db_block: db_block,
             scratch: scratch,
-            match_count: AtomicUsize::new(0),
+            // match_count: AtomicUsize::new(0),
         })
     }
 
-    fn on_match(_: u32, _: u64, _: u64, _: u32, match_count: &AtomicUsize) -> u32 {
-        match_count.fetch_add(1, Ordering::Relaxed);
+    fn on_match(_: u32, _: u64, _: u64, _: u32, match_count: &usize) -> u32 {
+        // match_count.fetch_add(1, Ordering::Relaxed);
         0
     }
 
@@ -67,7 +67,7 @@ impl HSC {
             0,
             &self.scratch,
             Some(Self::on_match),
-            Some(&self.match_count),
+            Some(&(0 as usize)),
         ) {
             println!("ERROR: Unable to scan packet. Exiting. {}", err)
         }

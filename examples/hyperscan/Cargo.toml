@@ -1,0 +1,17 @@
+[package]
+name = "hyperscan"
+version = "0.1.0"
+authors = ["Aurojit Panda <apanda@cs.berkeley.edu>", "William of Ockham <Occam_Engineering@comcast.com>", "Yang Zhou <yangzhou@g.harvard.edu"]
+description = "Example: dpi"
+license = "..."
+repository = "https://github.com/yangzhou1997/NetBricks/tree/master/examples/dpi"
+readme = "..."
+keywords = ["netbricks", "network-functions", "nfs", "packet-processing"]
+categories = ["network-functions", "framework"]
+
+[dependencies]
+hyperscan = "0.1"
+
+[features]
+default = []
+print = []

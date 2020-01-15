@@ -13,7 +13,8 @@ use std::io::{BufRead, BufReader, Write};
 use hyperscan::*;
 // use std::sync::atomic::{AtomicUsize, Ordering};
 
-const RULE_NUM: usize = (1 << 30); 
+// const RULE_NUM: usize = (1 << 30); 
+const RULE_NUM: usize = 1000; 
 
 fn parse_file(filename: &str) -> Result<Patterns> {
     let f = File::open(filename).unwrap();
@@ -81,7 +82,8 @@ impl HSC {
 thread_local! {
     pub static HYPERSCAN: RefCell<HSC> = {
         // do the actual file reading and string handling
-        let patterns = parse_file("/home/yangz/NetBricks/examples/dpi/rules/hs.rules").unwrap();
+        let mut patterns = parse_file("/home/yangz/NetBricks/examples/dpi/rules/hs.rules").unwrap();
+        patterns.truncate(RULE_NUM);
         println!("Compiling Hyperscan databases with {} patterns.", patterns.len());
         let db = patterns.build().unwrap();
         RefCell::new(HSC::new(db).unwrap())

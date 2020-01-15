@@ -10,8 +10,8 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::cell::RefCell;
 
-const RULE_NUM: usize = (1 << 30); 
-// const RULE_NUM: usize = 1000; 
+// const RULE_NUM: usize = (1 << 30); 
+const RULE_NUM: usize = 20000; 
 
 /* According to my customized pktgen_zeroloss: */
 // set pkt_size: 48 includes the 4B pkt_idx, 2B burst_size, and 2B identifier;

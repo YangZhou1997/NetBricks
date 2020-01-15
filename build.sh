@@ -4,6 +4,7 @@
 set -e
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 BUILD_SCRIPT=$( basename "$0" )
+export HYPERSCAN_ROOT=/usr/local
 
 if [[ -z ${CARGO_INCREMENTAL} ]] || [[ $CARGO_INCREMENTAL = false ]] || [[ $CARGO_INCREMENTAL = 0 ]]; then
     export CARGO_INCREMENTAL="CARGO_INCREMENTAL=0 "

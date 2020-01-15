@@ -82,6 +82,7 @@ thread_local! {
     pub static HYPERSCAN: RefCell<HSC> = {
         // do the actual file reading and string handling
         let patterns = parse_file("/home/yangz/NetBricks/examples/dpi/rules/hs.rules").unwrap();
+        patterns.truncate(RULE_NUM);
         println!("Compiling Hyperscan databases with {} patterns.", patterns.len());
         let db = patterns.build().unwrap();
         RefCell::new(HSC::new(db).unwrap())

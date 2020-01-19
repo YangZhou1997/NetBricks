@@ -167,8 +167,8 @@ pktgens_ipsec_acl = ["ICTF_IPSEC_ACL", "CAIDA64_IPSEC_ACL", "CAIDA256_IPSEC_ACL"
 
 
 # num_queues = [1, 2, 4, 8, 16]
-# num_queues = [1, 2, 4]
-num_queues = [1]
+num_queues = [1, 2, 4]
+# num_queues = [1]
 
 
 # ps -ef | grep release

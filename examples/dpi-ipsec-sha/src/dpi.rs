@@ -10,6 +10,7 @@ use aho_corasick::AhoCorasick;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::cell::RefCell;
+use std::env;
 
 const RULE_NUM: usize = (1 << 30); 
 
@@ -31,6 +32,13 @@ thread_local! {
                 break;
             }
         }
+
+        let args: Vec<String> = env::args().collect();
+        let rule_num: usize = match args.iter().position(|r| r.as_str() == "-r") {
+            Some(index) => args[index + 1].parse::<usize>().unwrap(),
+            None => RULE_NUM,
+        };
+        rules.truncate(rule_num);
 
         //let patterns = &["This is", "Yang", "abcedf"];
         let patterns = &rules;

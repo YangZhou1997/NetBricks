@@ -121,6 +121,7 @@ lazy_static! {
         (@arg cache_size: --("cache-size") +takes_value "per core cache size")
         (@arg dpdk_args: --("dpdk-args") ... +takes_value "custom DPDK arguments")
         (@arg duration: -d --duration +takes_value "test duration")
+        (@arg rulenum: -r --rulenum +takes_value "the number of rules")
     )
     .get_matches();
 }

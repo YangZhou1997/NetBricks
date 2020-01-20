@@ -40,4 +40,6 @@ export examples=(
         examples/dumptrace
         examples/hyperscan
         examples/dpi-hs
+        examples/dpi-hs-ipsec
+        examples/dpi-hs-ipsec-sha
 )

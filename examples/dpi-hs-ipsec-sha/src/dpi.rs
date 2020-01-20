@@ -13,6 +13,7 @@ use std::io::{BufRead, BufReader, Write};
 use hyperscan::*;
 // use std::sync::atomic::{AtomicUsize, Ordering};
 use std::env;
+use netbricks::utils::ipsec::*;
 
 const RULE_NUM: usize = (1 << 30); 
 
@@ -98,37 +99,30 @@ thread_local! {
     };
 }
 
-pub fn dpi(packet: RawPacket) -> Result<Tcp<Ipv4>> {
+pub fn dpi(packet: RawPacket) -> Result<Ipv4> {
     let mut ethernet = packet.parse::<Ethernet>()?;
     ethernet.swap_addresses();
     let v4 = ethernet.parse::<Ipv4>()?;
-    let tcp = v4.parse::<Tcp<Ipv4>>()?;
-    let payload: &[u8] = tcp.get_payload();
-
-    // println!("{}", payload.len());
-    // stdout().flush().unwrap();
+    let payload: &mut [u8] = v4.get_payload_mut(); // payload.len()
     
-    // let payload_str = match str::from_utf8(&payload[..]) {
-    //     Ok(v) => v,
-    //     Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
-    // };
-    // from_utf8_unchecked
+    let esp_hdr: &mut [u8] = &mut [0u8; 8];
+    esp_hdr.copy_from_slice(&payload[0..ESP_HEADER_LENGTH]);
 
-    // println!("{}", payload_str);
+    let decrypted_pkt: &mut [u8] = &mut [0u8; 2000];
+    let decrypted_pkt_len = aes_cbc_sha256_decrypt_openssl(payload, decrypted_pkt, false).unwrap();
+    // let decrypted_pkt_len = aes_gcm128_decrypt_openssl(payload, decrypted_pkt, false).unwrap();
+    // let decrypted_pkt_len = aes_gcm128_decrypt_mbedtls(payload, decrypted_pkt, false).unwrap();
+
+    // println!("decrypted_pkt_len: {}", decrypted_pkt_len - ESP_HEADER_LENGTH - AES_CBC_IV_LENGTH);
     // stdout().flush().unwrap();
 
-    // let mut matches = vec![];
-    // AC.with(|ac| {
-    //     for mat in ac.borrow().find_iter(payload) {
-    //         matches.push((mat.pattern(), mat.start(), mat.end()));
-    //     }
-    // });
     HYPERSCAN.with(|hc| {
         hc.borrow_mut().scan_block(payload)
     });
-    
-    // println!("{:?}", matches);
-    // stdout().flush().unwrap();
 
-    Ok(tcp)
+    let encrypted_pkt_len = aes_cbc_sha256_encrypt_openssl(&decrypted_pkt[..(decrypted_pkt_len - ESP_HEADER_LENGTH - AES_CBC_IV_LENGTH)], &(*esp_hdr), payload).unwrap();
+    // let encrypted_pkt_len = aes_gcm128_encrypt_openssl(&decrypted_pkt[..(decrypted_pkt_len - ESP_HEADER_LENGTH - AES_CBC_IV_LENGTH)], &(*esp_hdr), payload).unwrap();
+    // let encrypted_pkt_len = aes_gcm128_encrypt_mbedtls(&decrypted_pkt[..(decrypted_pkt_len - ESP_HEADER_LENGTH - AES_CBC_IV_LENGTH)], &(*esp_hdr), payload).unwrap();
+
+    Ok(v4)
 }

@@ -40,6 +40,8 @@ members = [
     "examples/dumptrace",
     "examples/hyperscan",
     "examples/dpi-hs",
+    "examples/dpi-hs-ipsec",
+    "examples/dpi-hs-ipsec-sha",
 ]
 exclude = ["hyperscan-0.1.8"]
 

@@ -13,7 +13,7 @@ echo $TASK
 if [ $# -eq 3 ]; then
     $HOME/NetBricks/target/$MODE/$TASK -f ./config_$2core.toml -r $3
 else
-    $HOME/NetBricks/target/$MODE/$TASK -p $PORT -c $CORE --pool-size=$POOL_SIZE -d $TIME -r $3
+    $HOME/NetBricks/target/$MODE/$TASK -p $PORT -c $CORE --pool-size=$POOL_SIZE -d $TIME -r 33471
 fi
 
 unset RUST_BACKTRACE

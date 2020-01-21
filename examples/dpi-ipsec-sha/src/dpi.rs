@@ -40,6 +40,7 @@ thread_local! {
         };
         rules.truncate(rule_num);
 
+        println!("number of rules: {}", rules.len());
         //let patterns = &["This is", "Yang", "abcedf"];
         let patterns = &rules;
         let m = AhoCorasick::new(patterns);

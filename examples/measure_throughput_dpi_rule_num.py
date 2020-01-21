@@ -90,7 +90,7 @@ tasks_ipsec_reboot = ["dpi-ipsec", "dpi-hs-ipsec"]
 pktgens_ipsec = ["ICTF_IPSEC", "CAIDA64_IPSEC", "CAIDA256_IPSEC", "CAIDA512_IPSEC", "CAIDA1024_IPSEC"]
 
 tasks_ipsec_sha_reboot = ["dpi-ipsec-sha", "dpi-hs-ipsec-sha"]
-pktgens_ipsec_sha = ["ICTF_IPSEC", "CAIDA64_IPSEC", "CAIDA256_IPSEC", "CAIDA512_IPSEC", "CAIDA1024_IPSEC"]
+pktgens_ipsec_sha = ["ICTF_IPSEC_SHA", "CAIDA64_IPSEC_SHA", "CAIDA256_IPSEC_SHA", "CAIDA512_IPSEC_SHA", "CAIDA1024_IPSEC_SHA"]
 
 # num_queues = [1, 2, 4, 8, 16]
 num_queues = [1, 2, 4]
@@ -112,26 +112,26 @@ if __name__ == '__main__':
 	fail_count = 0
 
 	for num_rule in num_rules:
-		for task in tasks_nonreboot:
+		for task in tasks_reboot:
 			for num_queue in num_queues:
 				run_count += 1
-				status = task_exec(task, pktgens, num_queue, num_rule, TIMES, throughput_res)
+				status = task_exec_reboot(task, pktgens, num_queue, num_rule, TIMES, throughput_res)
 				if status == -1:
 					fail_count += 1
 					fail_cases.append(task + " " + num_queue)
 
-		for task in tasks_ipsec_nonreboot:
+		for task in tasks_ipsec_reboot:
 			for num_queue in num_queues:
 				run_count += 1
-				status = task_exec(task, pktgens_ipsec, num_queue, num_rule, TIMES, throughput_res)
+				status = task_exec_reboot(task, pktgens_ipsec, num_queue, num_rule, TIMES, throughput_res)
 				if status == -1:
 					fail_count += 1
 					fail_cases.append(task + " " + num_queue)
 		
-		for task in tasks_ipsec_sha_nonreboot:
+		for task in tasks_ipsec_sha_reboot:
 			for num_queue in num_queues:
 				run_count += 1
-				status = task_exec(task, pktgens_ipsec_sha, num_queue, num_rule, TIMES, throughput_res)
+				status = task_exec_reboot(task, pktgens_ipsec_sha, num_queue, num_rule, TIMES, throughput_res)
 				if status == -1:
 					fail_count += 1
 					fail_cases.append(task + " " + num_queue)

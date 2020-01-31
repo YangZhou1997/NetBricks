@@ -101,7 +101,10 @@ num_rules = [1000, 5000, 10000, 20000, 30000, 33471]
 
 # ps -ef | grep release
 # sudo kill -9 ####
-TIMES = 10
+# TIMES = 10
+TIMES = 6
+# Remaining 6 times not running.
+
 
 if __name__ == '__main__':
 	now = datetime.datetime.now()

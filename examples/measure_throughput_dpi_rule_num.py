@@ -101,7 +101,7 @@ num_rules = [1000, 5000, 10000, 20000, 30000, 33471]
 
 # ps -ef | grep release
 # sudo kill -9 ####
-TIMES = 1
+TIMES = 10
 
 if __name__ == '__main__':
 	now = datetime.datetime.now()

@@ -97,12 +97,14 @@ num_queues = [1, 2, 4]
 # num_queues = [1]
 
 
-num_rules = [1000, 5000, 10000, 20000, 30000, 33471]
+# num_rules = [1000, 5000, 10000, 20000, 30000, 33471]
+num_rules = [10000, 20000, 30000, 33471]
+
 
 # ps -ef | grep release
 # sudo kill -9 ####
 # TIMES = 10
-TIMES = 6
+TIMES = 10
 # Remaining 6 times not running.
 
 
@@ -115,21 +117,22 @@ if __name__ == '__main__':
 	fail_count = 0
 
 	for num_rule in num_rules:
-		for task in tasks_reboot:
-			for num_queue in num_queues:
-				run_count += 1
-				status = task_exec_reboot(task, pktgens, num_queue, num_rule, TIMES, throughput_res)
-				if status == -1:
-					fail_count += 1
-					fail_cases.append(task + " " + num_queue)
+		if num_rule > 10000:
+			for task in tasks_reboot:
+				for num_queue in num_queues:
+					run_count += 1
+					status = task_exec_reboot(task, pktgens, num_queue, num_rule, TIMES, throughput_res)
+					if status == -1:
+						fail_count += 1
+						fail_cases.append(task + " " + num_queue)
 
-		for task in tasks_ipsec_reboot:
-			for num_queue in num_queues:
-				run_count += 1
-				status = task_exec_reboot(task, pktgens_ipsec, num_queue, num_rule, TIMES, throughput_res)
-				if status == -1:
-					fail_count += 1
-					fail_cases.append(task + " " + num_queue)
+			for task in tasks_ipsec_reboot:
+				for num_queue in num_queues:
+					run_count += 1
+					status = task_exec_reboot(task, pktgens_ipsec, num_queue, num_rule, TIMES, throughput_res)
+					if status == -1:
+						fail_count += 1
+						fail_cases.append(task + " " + num_queue)
 		
 		for task in tasks_ipsec_sha_reboot:
 			for num_queue in num_queues:
